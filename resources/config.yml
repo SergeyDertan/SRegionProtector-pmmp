@@ -1,0 +1,125 @@
+help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
+# default means that plugin will use server`s default language
+language: "default"
+provider: yaml
+#when enabled only /rg and /region commands will be shown
+hide-commands: false
+#when enabled /rg and /region commands will be executed asyncly
+async-commands: true
+async-commands-threads: -1
+
+lpos-max-radius: 250
+
+priority-system: false
+
+update-notifier: true
+
+#multithreaded regions loading
+multithreaded-loading: true
+multithreaded-loading-threads: -1
+# "20", "20:2"
+border-block: "20"
+#1 second = 20 ticks
+select-session-clear-interval: 20
+session-life-time: 120
+#disabling flags may increase performance
+#by default flags are disabled
+active-flags:
+  place: true
+  break: true
+  interact: true
+  use: true
+  pvp: true
+  explode: true
+  lighter: true
+  magic-item-use: false
+  heal: false
+  invincible: true
+  potion-launch: true
+  move: false
+  leaves_decay: false
+  item-drop: false
+  send-chat: false
+  receive-chat: false
+  health-regen: false
+  mob-damage: false
+  mob-spawn: false
+  crops-destroy: true
+  redstone: false
+  ender-pearl: false
+  explode-block-break: true
+  liquid-flow: true
+  lightning-strike: true
+  fire: true
+  chest-access: true
+  sleep: true
+  chunk-loader: false
+  smart-doors: true
+  minefarm: true
+  fall-damage: true
+  nether-portal: true
+  frame-item-drop: true
+  bucket-empty: true
+  bucket-fill: true
+display:
+  place: true
+  break: true
+  interact: true
+  use: true
+  pvp: true
+  explode: true
+  lighter: true
+  magic-item-use: true
+  heal: true
+  invincible: true
+  potion-launch: true
+  move: true
+  leaves_decay: true
+  item-drop: true
+  send-chat: true
+  receive-chat: true
+  health-regen: true
+  mob-damage: true
+  mob-spawn: true
+  crops-destroy: true
+  redstone: true
+  ender-pearl: true
+  explode-block-break: true
+  liquid-flow: true
+  lightning-strike: true
+  fire: true
+  chest-access: true
+  sleep: true
+  chunk-loader: true
+  smart-doors: true
+  minefarm: true
+  fall-damage: true
+  nether-portal: true
+  frame-item-drop: true
+  bucket-empty: true
+  bucket-fill: true
+# players need no permission to create regions with this size & amount
+# to let player create more regions with greater size give him permissions
+# "sregionprotector.region.size.DESIRED_MAX_SIZE", and
+# "sregionprotector.region.amount.DESIRED_MAX_AMOUNT"
+default-max-region-size: 15000
+default-max-region-amount: 3
+#in seconds
+auto-save-period: 60
+auto-save: true
+#in seconds
+empty-chunks-removing-period: 360
+empty-chunks-auto-removing: true
+
+#if enabled all regions will be updated when new flag added
+save-new-flags: false
+#"chest" or "form"
+ui-type: "chest"
+
+max-borders-amount: 300
+
+# angry villager particle when flag activated
+show-particle: true
+
+# message(default), tip, popup
+protected-message-type: "message"

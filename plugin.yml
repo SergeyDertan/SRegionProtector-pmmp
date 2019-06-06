@@ -1,0 +1,178 @@
+name: "SRegionProtector"
+main: sergeydertan\sregionprotector\main\SRegionProtectorMain
+api: [3.8.3]
+version: "1"
+author: Sergey_Dertan
+website: https://vk.com/sergey_dertan
+load: STARTUP
+prefix: '§eSRegionProtector§f'
+softdepend:
+  - EconomyAPI
+permissions:
+  sregionprotector.*:
+    default: false
+    children:
+      sregionprotector.admin:
+        description: "Allows to editing all regions"
+        default: op
+        children:
+          sregionprotector.update-notify:
+            default: op
+      sregionprotector.wand:
+        default: true
+      sregionprotector.command.*:
+        default: false
+        children:
+          sregionprotector.command.pos1:
+            default: true
+          sregionprotector.command.wand:
+            default: true
+          sregionprotector.command.pos2:
+            default: true
+          sregionprotector.command.create:
+            default: true
+          sregionprotector.command.list:
+            default: true
+          sregionprotector.command.remove:
+            default: true
+          sregionprotector.command.addmember:
+            default: true
+          sregionprotector.command.addowner:
+            default: true
+          sregionprotector.command.removemember:
+            default: true
+          sregionprotector.command.removeowner:
+            default: true
+          sregionprotector.command.flag:
+            default: true
+          sregionprotector.command.info:
+            default: true
+          sregionprotector.command.teleport:
+            default: true
+          sregionprotector.command.buy:
+            default: true
+          sregionprotector.command.size:
+            default: true
+          sregionprotector.command.region:
+            default: true
+          sregionprotector.command.save:
+            default: op
+          sregionprotector.command.select:
+            default: true
+          sregionprotector.command.show-border:
+            default: true
+          sregionprotector.command.remove-borders:
+            default: true
+          sregionprotector.command.expand:
+            default: true
+          sregionprotector.command.sell:
+            default: true
+          sregionprotector.command.remove-from-sell:
+            default: true
+          sregionprotector.command.lpos1:
+            default: true
+          sregionprotector.command.lpos2:
+            default: true
+          sregionprotector.command.set-priority:
+            default: op
+          sregionprotector.command.migrate:
+            default: op
+          sregionprotector.command.gui:
+            default: true
+          sregionprotector.command.copy-flags:
+            default: op
+      sregionprotector.region.*:
+        default: op
+        children:
+          sregionprotector.info.other:
+            default: op
+          #allows players to select regions they are not lives in
+          sregionprotector.region.select-other:
+            default: op
+          sregionprotector.region.size.*:
+            description: "Allows to creating regions with any size"
+            default: op
+          sregionprotector.region.amount.*:
+            description: "Allows to creating any amount of regions"
+            default: op
+          sregionprotector.region.flag.*:
+            default: false
+            children:
+              sregionprotector.region.flag.place:
+                default: op
+              sregionprotector.region.flag.break:
+                default: op
+              sregionprotector.region.flag.interact:
+                default: true
+              sregionprotector.region.flag.use:
+                default: true
+              sregionprotector.region.flag.pvp:
+                default: op
+              sregionprotector.region.flag.tnt:
+                default: op
+              sregionprotector.region.flag.lighter:
+                default: op
+              sregionprotector.region.flag.magic_item:
+                default: op
+              sregionprotector.region.flag.heal:
+                default: op
+              sregionprotector.region.flag.invincible:
+                default: op
+              sregionprotector.region.flag.teleport:
+                default: op
+              sregionprotector.region.flag.sell:
+                default: true
+              sregionprotector.region.flag.potion_launch:
+                default: true
+              sregionprotector.region.flag.move:
+                default: op
+              sregionprotector.region.flag.leaves_decay:
+                default: op
+              sregionprotector.region.flag.explode:
+                default: op
+              sregionprotector.region.flag.item_drop:
+                default: op
+              sregionprotector.region.flag.send_chat:
+                default: op
+              sregionprotector.region.flag.receive_chat:
+                default: op
+              sregionprotector.region.flag.health_regen:
+                default: op
+              sregionprotector.region.flag.mob_spawn:
+                default: op
+              sregionprotector.region.flag.mob_damage:
+                default: op
+              sregionprotector.region.flag.crops_destroy:
+                default: op
+              sregionprotector.region.flag.redstone:
+                default: op
+              sregionprotector.region.flag.ender_pearl:
+                default: op
+              sregionprotector.region.flag.explode_block_break:
+                default: op
+              sregionprotector.region.flag.liquid_flow:
+                default: op
+              sregionprotector.region.flag.fire:
+                default: op
+              sregionprotector.region.flag.lightning_strike:
+                default: op
+              sregionprotector.region.flag.chest_access:
+                default: op
+              sregionprotector.region.flag.sleep:
+                default: op
+              sregionprotector.region.flag.chunk_loader:
+                default: op
+              sregionprotector.region.flag.smart_doors:
+                default: true
+              sregionprotector.region.flag.minefarm:
+                default: op
+              sregionprotector.region.flag.fall_damage:
+                default: op
+              sregionprotector.region.flag.nether_portal:
+                default: op
+              sregionprotector.region.flag.frame_item_drop:
+                default: op
+              sregionprotector.region.flag.bucket_empty:
+                default: op
+              sregionprotector.region.flag.bucket_fill:
+                default: op
