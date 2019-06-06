@@ -31,19 +31,19 @@ final class RegionSizeCommand extends SRegionProtectorCommand
          * @var Player $sender
          */
         if (!$this->regionSelector->sessionExists($sender)) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.select-first");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.select-first");
             return;
         }
         $session = $this->regionSelector->getSession($sender);
 
         if ($session->pos1 === null || $session->pos2 === null) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-required");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-required");
             return;
         }
         if ($session->pos1->level !== $session->pos2->level) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-in-different-worlds");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-in-different-worlds");
             return;
         }
-        $this->messenger->sendMessage($sender, "command.{$this->getName()}.size", ["@size"], [(string)$session->calculateSize()]);
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.size", ["@size"], [(string)$session->calculateSize()]);
     }
 }

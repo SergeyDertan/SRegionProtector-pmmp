@@ -20,7 +20,8 @@ abstract class SRegionProtectorCommand extends Command
     public function __construct(string $name, string $msg = null, string $perm = null)
     {
         if ($msg === null) {
-            $msg = $perm = $name;
+            $msg = $name;
+            $perm = $name;
         } else if ($perm === null) {
             $perm = $msg;
         }

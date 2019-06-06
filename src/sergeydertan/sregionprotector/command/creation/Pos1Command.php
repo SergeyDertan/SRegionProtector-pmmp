@@ -41,6 +41,6 @@ final class Pos1Command extends SRegionProtectorCommand
         } else {
             $this->regionSelector->getSession($sender)->pos1 = clone $sender->getPosition();
         }
-        $this->messenger->sendMessage($sender, "command.{$this->getName()}.pos-set");
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.pos-set");
     }
 }

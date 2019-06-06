@@ -37,10 +37,10 @@ final class LPos2Command extends SRegionProtectorCommand
          */
         $pos = $sender->getTargetBlock($this->maxRadius);
         if ($pos === null) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.fail", ["@radius"], [(string)$this->maxRadius]);
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.fail", ["@radius"], [(string)$this->maxRadius]);
         } else {
             $this->regionSelector->getSession($sender)->pos1 = Position::fromObject($pos, $pos->level);
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.success");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.success");
         }
     }
 }

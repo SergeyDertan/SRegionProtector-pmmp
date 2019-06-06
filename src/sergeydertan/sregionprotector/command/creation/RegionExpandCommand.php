@@ -34,7 +34,7 @@ final class RegionExpandCommand extends SRegionProtectorCommand
          * @var Player $sender
          */
         if (!$this->regionSelector->sessionExists($sender)) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-required");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-required");
             return;
         }
         if (!$this->checkUsage($sender, 2, $args)) return;
@@ -42,12 +42,12 @@ final class RegionExpandCommand extends SRegionProtectorCommand
         $session = $this->regionSelector->getSession($sender);
 
         if ($session->pos1 === null || $session->pos2 === null) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-required");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-required");
             return;
         }
 
         if ($session->pos1->level !== $session->pos2->level) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-in-different-worlds");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-in-different-worlds");
             return;
         }
 
@@ -59,7 +59,7 @@ final class RegionExpandCommand extends SRegionProtectorCommand
         } else if (strcasecmp(self::EXPAND_RADIUS, $args[1]) === 0) {
             $session->expandRadius($y);
         } else {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.up-or-down");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.up-or-down");
             return;
         }
         $session->fixHeight();
@@ -67,6 +67,6 @@ final class RegionExpandCommand extends SRegionProtectorCommand
             $this->regionSelector->removeBorders($sender, true);
             $this->regionSelector->showBorders($sender, $session->pos1, $session->pos2);
         }
-        $this->messenger->sendMessage($sender, "command.{$this->getName()}.success", ["@size"], [(string)$session->calculateSize()]);
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.success", ["@size"], [(string)$session->calculateSize()]);
     }
 }

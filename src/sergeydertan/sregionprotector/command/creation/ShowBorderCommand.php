@@ -36,24 +36,24 @@ final class ShowBorderCommand extends SRegionProtectorCommand
          * @var Player $sender
          */
         if (!$this->regionSelector->sessionExists($sender)) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.select-first");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.select-first");
             return;
         }
         $session = $this->regionSelector->getSession($sender);
 
         if ($session->pos1 === null || $session->pos2 === null) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-required");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-required");
             return;
         }
         if ($session->pos1->level !== $session->pos2->level) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.positions-in-different-worlds");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.positions-in-different-worlds");
             return;
         }
         if ($this->regionSelector->calculateEdgesLength($session->pos1, $session->pos2) > $this->maxBorders) {
-            $this->messenger->sendMessage($sender, "command.{$this->getName()}.too-long");
+            $this->messenger->sendMessage($sender, "command.{$this->msg}.too-long");
             return;
         }
-        $this->messenger->sendMessage($sender, "command.{$this->getName()}.success");
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.success");
         $this->regionSelector->showBorders($sender, $session->pos1, $session->pos2);
     }
 }
