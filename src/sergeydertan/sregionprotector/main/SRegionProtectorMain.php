@@ -5,7 +5,6 @@ namespace sergeydertan\sregionprotector\main;
 
 use Exception;
 use pocketmine\command\Command;
-use pocketmine\command\manager\OpenUICommand;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
@@ -22,6 +21,7 @@ use sergeydertan\sregionprotector\command\creation\Pos2Command;
 use sergeydertan\sregionprotector\command\creation\RegionExpandCommand;
 use sergeydertan\sregionprotector\command\creation\RegionSizeCommand;
 use sergeydertan\sregionprotector\command\creation\ShowBorderCommand;
+use sergeydertan\sregionprotector\command\manage\OpenUICommand;
 use sergeydertan\sregionprotector\command\RegionCommand;
 use sergeydertan\sregionprotector\event\RegionEventsHandler;
 use sergeydertan\sregionprotector\event\SelectorEventsHandler;

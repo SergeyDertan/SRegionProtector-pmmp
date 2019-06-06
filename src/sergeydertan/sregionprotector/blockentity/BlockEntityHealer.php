@@ -8,6 +8,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\tile\Spawnable;
+use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
 use sergeydertan\sregionprotector\region\RegionManager;
 
@@ -40,7 +41,7 @@ final class BlockEntityHealer extends Spawnable
     {
         parent::__construct($level, $nbt);
         $this->region = $nbt->getString("region");
-        //TODO manager
+        $this->regionManager = SRegionProtectorMain::getInstance()->getRegionManager();
 
         $this->bb = $this->regionManager->getRegion($this->region)->getBoundingBox();
 

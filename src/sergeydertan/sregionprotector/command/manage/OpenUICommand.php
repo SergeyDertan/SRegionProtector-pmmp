@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace pocketmine\command\manager;
+namespace sergeydertan\sregionprotector\command\manage;
 
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
