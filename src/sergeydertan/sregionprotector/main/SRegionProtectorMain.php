@@ -5,6 +5,7 @@ namespace sergeydertan\sregionprotector\main;
 
 use Exception;
 use pocketmine\command\Command;
+use pocketmine\command\manager\OpenUICommand;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
@@ -215,6 +216,8 @@ final class SRegionProtectorMain extends PluginBase
         $this->registerCommand(new RegionExpandCommand($this->regionSelector));
 
         $this->registerCommand(new ShowBorderCommand($this->regionSelector, $this->settings->getMaxBordersAmount()));
+
+        $this->registerCommand(new OpenUICommand($this->regionManager, $this->chunkManager, $this->settings->getUiType()));
     }
 
     private function registerCommand(Command $command): void

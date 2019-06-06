@@ -7,6 +7,7 @@ use Logger;
 use pocketmine\math\Vector3;
 use pocketmine\scheduler\Task;
 use pocketmine\scheduler\TaskScheduler;
+use sergeydertan\sregionprotector\region\Region;
 
 final class ChunkManager
 {
@@ -42,6 +43,16 @@ final class ChunkManager
                 $this->chunkManager->removeEmptyChunks();
             }
         }, $removePeriod * 20, $removePeriod * 20);
+    }
+
+    public function getRegion(Vector3 $pos, string $level): ?Region
+    {
+        $chunk = $this->getChunk($pos->x, $pos->z, $level);
+        if ($chunk === null) return null;
+        foreach ($chunk->getRegions() as $region) {
+            if ($region->isVectorInside($pos)) return $region;
+        }
+        return null;
     }
 
     public function removeEmptyChunks(): void
