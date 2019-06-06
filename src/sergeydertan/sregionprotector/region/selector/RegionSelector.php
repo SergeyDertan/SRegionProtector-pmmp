@@ -40,7 +40,7 @@ final class RegionSelector
         unset($this->sessions[$player->getLoaderId()]);
     }
 
-    public function getSession(Player $player): ?SelectorSession
+    public function getSession(Player $player): SelectorSession
     {
         if (isset($this->sessions[$player->getLoaderId()])) return $this->sessions[$player->getLoaderId()];
         $session = $this->sessions[$player->getLoaderId()] = new SelectorSession($this->sessionLifeTime);
@@ -63,6 +63,11 @@ final class RegionSelector
     public function sessionExists(Player $player): bool
     {
         return isset($this->sessions[$player->getLoaderId()]);
+    }
+
+    public function hasBorders(Player $player): bool
+    {
+        return isset($this->borders[$player->getLoaderId()]);
     }
 
     public function calculateEdgesLength(Vector3 $pos1, Vector3 $pos2): int

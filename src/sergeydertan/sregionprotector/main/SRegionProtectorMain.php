@@ -14,6 +14,13 @@ use RuntimeException;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\command\creation\CreateRegionCommand;
 use sergeydertan\sregionprotector\command\creation\GetWandCommand;
+use sergeydertan\sregionprotector\command\creation\LPos1Command;
+use sergeydertan\sregionprotector\command\creation\LPos2Command;
+use sergeydertan\sregionprotector\command\creation\Pos1Command;
+use sergeydertan\sregionprotector\command\creation\Pos2Command;
+use sergeydertan\sregionprotector\command\creation\RegionExpandCommand;
+use sergeydertan\sregionprotector\command\creation\RegionSizeCommand;
+use sergeydertan\sregionprotector\command\creation\ShowBorderCommand;
 use sergeydertan\sregionprotector\command\RegionCommand;
 use sergeydertan\sregionprotector\event\RegionEventsHandler;
 use sergeydertan\sregionprotector\event\SelectorEventsHandler;
@@ -194,6 +201,20 @@ final class SRegionProtectorMain extends PluginBase
         $this->registerCommand(new CreateRegionCommand($this->regionSelector, $this->regionManager, $this->settings->getRegionSettings()));
 
         $this->registerCommand(new GetWandCommand());
+
+        $this->registerCommand(new LPos1Command($this->regionSelector, $this->settings->getLposMaxRadius()));
+
+        $this->registerCommand(new LPos2Command($this->regionSelector, $this->settings->getLposMaxRadius()));
+
+        $this->registerCommand(new Pos1Command($this->regionSelector));
+
+        $this->registerCommand(new Pos2Command($this->regionSelector));
+
+        $this->registerCommand(new RegionSizeCommand($this->regionSelector));
+
+        $this->registerCommand(new RegionExpandCommand($this->regionSelector));
+
+        $this->registerCommand(new ShowBorderCommand($this->regionSelector, $this->settings->getMaxBordersAmount()));
     }
 
     private function registerCommand(Command $command): void
