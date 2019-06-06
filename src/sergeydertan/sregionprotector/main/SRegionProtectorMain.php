@@ -146,7 +146,7 @@ final class SRegionProtectorMain extends PluginBase
     private function initDataProvider(): bool
     {
         try {
-            $this->dataProvider = $this->getProviderInstance($this->settings->getProvider());//TODO settings
+            $this->dataProvider = $this->getProviderInstance($this->settings->getProvider());
             return true;
         } catch (Exception $e) {
             return false;
@@ -173,7 +173,7 @@ final class SRegionProtectorMain extends PluginBase
 
     private function initRegions(): void
     {
-        $this->regionSelector = new RegionSelector($this->settings->getSelectorSessionLifetime(), $this->settings->getBorderBlock());//TODO settings
+        $this->regionSelector = new RegionSelector($this->settings->getSelectorSessionLifetime(), $this->settings->getBorderBlock());
         $this->regionManager = new RegionManager($this->dataProvider, $this->getLogger(), $this->chunkManager);
         $this->regionManager->init($this->settings->getRegionSettings()->isSaveNewFlags());
     }

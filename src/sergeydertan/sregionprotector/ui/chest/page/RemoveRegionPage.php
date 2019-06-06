@@ -35,7 +35,7 @@ class RemoveRegionPage extends Page
 
         $no = Item::get(ItemIds::EMERALD_BLOCK)->setCustomName(Messenger::getInstance()->getMessage("gui.remove.cancel"));
         $nbt = $no->getNamedTag();
-        $nbt->setString(Tags::OPEN_PAGE_TAG, "main");//TODO hard code
+        $nbt->setString(Tags::OPEN_PAGE_TAG, self::$mainPage->getName());
         $no->setNamedTag($nbt);
         $items[12] = $no;
 

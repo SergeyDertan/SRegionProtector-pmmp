@@ -63,7 +63,7 @@ abstract class Page
         self::$navigatorsCache[23] = Item::get(ItemIds::APPLE)->setNamedTag($nbt);
 
         $nbt = new CompoundTag();
-        $nbt->setString(Tags::OPEN_PAGE_TAG, "main");//TODO name, hardcode
+        $nbt->setString(Tags::OPEN_PAGE_TAG, self::$mainPage->getName());//TODO name
         self::$navigatorsCache[23] = Item::get(ItemIds::SLIME_BALL)->setNamedTag($nbt);
     }
 

@@ -52,7 +52,7 @@ final class RegionManager
      */
     private $messenger;
 
-    public function __construct($provider, Logger $logger, ChunkManager $chunkManager) //todo provider
+    public function __construct(DataProvider $provider, Logger $logger, ChunkManager $chunkManager)
     {
         $this->provider = $provider;
         $this->logger = $logger;

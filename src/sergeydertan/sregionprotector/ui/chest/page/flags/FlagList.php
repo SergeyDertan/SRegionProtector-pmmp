@@ -11,11 +11,11 @@ class FlagList implements \ArrayAccess
     /**
      * @var boolean[]
      */
-    private static $display; //TODO
+    private static $display;
     /**
      * @var boolean[]
      */
-    private static $status; //TODO
+    private static $status;
     /**
      * @var Region
      */

@@ -49,7 +49,7 @@ abstract class ChestUIManager
         $pk1->x = (int)$target->x;
         $pk1->y = (int)$target->y - 1;
         $pk1->z = (int)$target->z;
-        $pk1->flags = UpdateBlockPacket::FLAG_NONE; //TODO
+        $pk1->flags = UpdateBlockPacket::FLAG_NONE;
         $pk1->blockRuntimeId = Block::get(BlockIds::CHEST, 0)->getRuntimeId();
         $target->dataPacket($pk1);
 
