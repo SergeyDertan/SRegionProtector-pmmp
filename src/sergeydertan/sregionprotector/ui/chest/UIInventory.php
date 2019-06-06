@@ -25,6 +25,7 @@ final class UIInventory extends ContainerInventory
     public function __construct(Vector3 $holder, array $items, Region $region)
     {
         parent::__construct($holder, $items, 27, $region->getName());
+        $this->region = $region;
     }
 
     public function getDefaultSize(): int

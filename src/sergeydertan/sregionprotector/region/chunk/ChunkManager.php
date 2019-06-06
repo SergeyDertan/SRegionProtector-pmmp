@@ -45,16 +45,6 @@ final class ChunkManager
         }, $removePeriod * 20, $removePeriod * 20);
     }
 
-    public function getRegion(Vector3 $pos, string $level): ?Region
-    {
-        $chunk = $this->getChunk($pos->x, $pos->z, $level);
-        if ($chunk === null) return null;
-        foreach ($chunk->getRegions() as $region) {
-            if ($region->isVectorInside($pos)) return $region;
-        }
-        return null;
-    }
-
     public function removeEmptyChunks(): void
     {
         foreach ($this->chunks as $level => $chunks) {
@@ -67,6 +57,43 @@ final class ChunkManager
                 $this->chunks[$level] = $chunks;
             }
         }
+    }
+
+    public function getRegion(Vector3 $pos, string $level): ?Region
+    {
+        $chunk = $this->getChunk($pos->x, $pos->z, $level);
+        if ($chunk === null) return null;
+        foreach ($chunk->getRegions() as $region) {
+            if ($region->isVectorInside($pos)) return $region;
+        }
+        return null;
+    }
+
+    public function getChunk(int $x, int $z, string $level, bool $shiftRight = true, bool $create = false): ?Chunk
+    {
+        $chunks = isset($this->chunks[$level]) ? $this->chunks[$level] : null;
+        if ($chunks === null && !$create) return null;
+
+        if ($shiftRight) {
+            $x >>= 4;
+            $z >>= 4;
+        }
+
+        if ($chunks === null) {
+            $chunks = [];
+        }
+
+        $hash = self::chunkHash($x, $z);
+        if (!isset($chunks[$hash]) && !$create) return null;
+        $chunk = new Chunk($x, $z);
+        $chunks[$hash] = $chunk;
+        $this->chunks[$level] = $chunks;
+        return $chunk;
+    }
+
+    public static function chunkHash(int $x, int $z): int
+    {
+        return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
     }
 
     public function getChunkAmount(): int
@@ -112,32 +139,5 @@ final class ChunkManager
             if ($x > $maxX) $x = $maxX;
         }
         return $chunks;
-    }
-
-    public function getChunk(int $x, int $z, string $level, bool $shiftRight = true, bool $create = false): ?Chunk
-    {
-        $chunks = isset($this->chunks[$level]) ? $this->chunks[$level] : null;
-        if ($chunks === null && !$create) return null;
-
-        if ($shiftRight) {
-            $x >>= 4;
-            $z >>= 4;
-        }
-
-        if ($chunks === null) {
-            $chunks = [];
-        }
-
-        $hash = self::chunkHash($x, $z);
-        if (!isset($chunks[$hash]) && !$create) return null;
-        $chunk = new Chunk($x, $z);
-        $chunks[$hash] = $chunk;
-        $this->chunks[$level] = $chunks;
-        return $chunk;
-    }
-
-    public static function chunkHash(int $x, int $z): int
-    {
-        return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
     }
 }

@@ -14,7 +14,7 @@ class MainPage extends Page
     /**
      * @var Item[]
      */
-    private static $icons;
+    private static $icons = [];
 
     /**
      * @param Region $region

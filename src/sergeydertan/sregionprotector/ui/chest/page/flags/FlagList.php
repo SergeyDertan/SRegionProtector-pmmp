@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\ui\chest\page\flags;
 
+use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\Region;
 
 class FlagList implements \ArrayAccess
@@ -10,11 +11,11 @@ class FlagList implements \ArrayAccess
     /**
      * @var boolean[]
      */
-    private static $display = []; //TODO
+    private static $display; //TODO
     /**
      * @var boolean[]
      */
-    private static $status = []; //TODO
+    private static $status; //TODO
     /**
      * @var Region
      */
@@ -27,6 +28,9 @@ class FlagList implements \ArrayAccess
     public function __construct(Region $region)
     {
         $this->region = $region;
+
+        self::$display = SRegionProtectorMain::getInstance()->getSettings()->getRegionSettings()->getDisplay();
+        self::$status = SRegionProtectorMain::getInstance()->getSettings()->getRegionSettings()->getFlagStatus();
     }
 
     /**
