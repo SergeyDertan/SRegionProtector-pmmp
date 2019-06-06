@@ -49,7 +49,7 @@ abstract class ChestUIManager
         $pk1->x = (int)$target->x;
         $pk1->y = (int)$target->y - 1;
         $pk1->z = (int)$target->z;
-        $pk1->flags = UpdateBlockPacket::FLAG_ALL; //TODO
+        $pk1->flags = UpdateBlockPacket::FLAG_NONE; //TODO
         $pk1->blockRuntimeId = Block::get(BlockIds::CHEST, 0)->getRuntimeId();
         $target->dataPacket($pk1);
 
@@ -72,7 +72,7 @@ abstract class ChestUIManager
         return new Vector3($pk1->x, $pk1->y, $pk1->z);
     }
 
-    private static function removeChest(Player $player, Vector3 $pos = null): void
+    public static function removeChest(Player $player, Vector3 $pos = null): void
     {
         if ($pos === null) {
             $inventory = self::$inventories[$player->getLoaderId()];

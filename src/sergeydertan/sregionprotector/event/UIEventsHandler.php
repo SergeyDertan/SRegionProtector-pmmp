@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\event;
 
+use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
 use sergeydertan\sregionprotector\ui\chest\ChestUIManager;
@@ -22,6 +23,11 @@ final class UIEventsHandler implements Listener
         $this->uiType = $uiType;
     }
 
+    /**
+     * @param InventoryTransactionEvent $e
+     * @priority HIGHEST
+     * @ignoreCancelled true
+     */
     public function inventoryTransaction(InventoryTransactionEvent $e): void
     {
         if ($this->uiType !== UIType::CHEST) return;
@@ -45,5 +51,13 @@ final class UIEventsHandler implements Listener
                 return;
             }
         }
+    }
+
+    public function inventoryClose(InventoryCloseEvent $e): void
+    {
+        if ($this->uiType !== UIType::CHEST) return;
+        $inv = $e->getInventory();
+        if (!$inv instanceof UIInventory) return;
+        ChestUIManager::removeChest($e->getPlayer(), $inv->getHolder());
     }
 }
