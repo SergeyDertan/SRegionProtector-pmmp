@@ -142,8 +142,8 @@ final class RegionManager
 
             $flags = [];
 
-            foreach ($region["flags"] as $name => $flagData) {
-                $id = RegionFlags::getFlagId($name);
+            foreach ($region["flags"] as $flagName => $flagData) {
+                $id = RegionFlags::getFlagId($flagName);
                 $state = (bool)$flagData["state"];
                 if ($id === RegionFlags::FLAG_SELL) {
                     $flag = new RegionSellFlag($state, (int)$flagData["price"]);
