@@ -55,6 +55,7 @@ final class Chunk
     {
         $this->regions[] = $region;
         usort($this->regions, self::$regionComparator);
+        //TODO unique
     }
 
     public function removeRegion(Region $region): void

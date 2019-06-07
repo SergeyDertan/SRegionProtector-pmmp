@@ -36,7 +36,9 @@ use pocketmine\item\ItemIds;
 use pocketmine\level\particle\AngryVillagerParticle;
 use pocketmine\level\Position;
 use pocketmine\level\sound\DoorSound;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
+use pocketmine\utils\MainLogger;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\region\chunk\ChunkManager;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
@@ -104,7 +106,6 @@ final class RegionEventsHandler implements Listener
         $this->handleEvent(RegionFlags::FLAG_BREAK, $e->getBlock(), $e, $e->getPlayer());
     }
 
-
     /**
      * place flag
      * @param BlockPlaceEvent $e
@@ -129,34 +130,37 @@ final class RegionEventsHandler implements Listener
         $block = $e->getBlock();
         $this->handleEvent(RegionFlags::FLAG_INTERACT, $block, $e, $e->getPlayer());
         if ($e->isCancelled()) return;
-        if ($block instanceof Door || $block instanceof IronTrapdoor) {
+
+        if ($block instanceof Door) {
             if ($this->canInteractWith(RegionFlags::FLAG_SMART_DOORS, $block, $e->getPlayer())) {
-                if ($block instanceof IronTrapdoor) {
-                    $block->setDamage($block->getDamage() ^ 0x08);
-                    $block->level->setBlock($block, $block, true);
-                    $block->level->addSound(new DoorSound($block));
-                    return;
-                }
                 /**
                  * @var Door $block
                  */
+                //($this->getDamage() & 0x08) === 0x08
 
-                $damage = $block->getDamage();
-                $isUp = ($damage & 8) > 0;
+                $isUp = ($block->getDamage() & 0x08) === 0x08;
                 if ($isUp) {
-                    $up = $damage;
+                    $up = $block->getDamage();
                 } else {
-                    $up = $block->level->getBlock($block->up())->getDamage();
+                    $up = $block->getSide(Vector3::SIDE_UP)->getDamage();
                 }
-                $isRight = ($up & 1) > 0;
 
                 if ($isUp) {
-                    //$second=$block->level->getBlock($block->down())->getSide()
+                    $second = $block->getSide(Vector3::SIDE_DOWN);
+                } else {
+                    $second = $block;
                 }
 
-                //TODO smart doors
+                if (($up & 0x01) <= 0) {
+                    $f = $second->getSide(Vector3::SIDE_EAST);
+                } else {
+                    $f = $second->getSide(Vector3::SIDE_SOUTH);
+                }
 
-                $e->setCancelled();
+                $f->setDamage($f->getDamage() & 0x04);
+                $f->level->setBlock($f, $f, true);
+
+                //$e->setCancelled();
                 return;
             }
         }
@@ -213,15 +217,7 @@ final class RegionEventsHandler implements Listener
         }
     }
 
-    /**
-     * @param EntitySpawnEvent $e
-     *
-     * @priority HIGH
-     */
-    public function entitySpawn(EntitySpawnEvent$e):void{
-        $ev=new EmptyEvent();
-        //TODO
-    }
+    //TODO entity spawn event
 
     //TODO lighting strike event
 

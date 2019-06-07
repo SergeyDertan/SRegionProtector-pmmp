@@ -72,7 +72,9 @@ final class ChunkManager
     public function getChunk(int $x, int $z, string $level, bool $shiftRight = true, bool $create = false): ?Chunk
     {
         $chunks = isset($this->chunks[$level]) ? $this->chunks[$level] : null;
-        if ($chunks === null && !$create) return null;
+        if ($chunks === null && !$create) {
+            return null;
+        }
 
         if ($shiftRight) {
             $x >>= 4;
@@ -84,7 +86,12 @@ final class ChunkManager
         }
 
         $hash = self::chunkHash($x, $z);
-        if (!isset($chunks[$hash]) && !$create) return null;
+        if (!isset($chunks[$hash]) && !$create) {
+            return null;
+        }
+        if (isset($chunks[$hash])) {
+            return $chunks[$hash];
+        }
         $chunk = new Chunk($x, $z);
         $chunks[$hash] = $chunk;
         $this->chunks[$level] = $chunks;
