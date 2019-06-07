@@ -287,26 +287,39 @@ final class RegionManager
         return false;
     }
 
-    public function getRegionAmount(string $player, int $type = RegionGroup::CREATOR): int
+    public function getRegionAmount(string $player, int $group = RegionGroup::CREATOR): int
     {
-        switch ($type) {
+        return count($this->getPlayersRegionList($player, $group));
+    }
+
+    /**
+     * @param string $player
+     * @param int $regionGroup
+     * @return Region[]
+     * @see RegionGroup
+     */
+    public function getPlayersRegionList(string $player, int $regionGroup = RegionGroup::CREATOR): array
+    {
+        $player = strtolower($player);
+        switch ($regionGroup) {
             case RegionGroup::CREATOR:
-                if (!isset($this->owners[strtolower($player)])) return 0;
-                $amount = 0;
-                foreach ($this->owners[strtolower($player)] as $region) {
-                    if ($region->isCreator($player)) ++$amount;
+                if (!isset($this->owners[$player])) return [];
+                $regions = [];
+                foreach ($this->owners[$player] as $region) {
+                    if ($region->isCreator($player)) $regions[] = $region;
                 }
-                return $amount;
+                return $regions;
                 break;
             case RegionGroup::OWNER:
-                if (!isset($this->owners[strtolower($player)])) return 0;
-                return count($this->owners[strtolower($player)]);
+                if (isset($this->owners[$player])) return $this->owners[$player];
+                return [];
                 break;
             case RegionGroup::MEMBER:
-                if (!isset($this->members[strtolower($player)])) return 0;
-                return count($this->members[strtolower($player)]);
+                if (isset($this->members[$player])) return $this->members[$player];
+                return [];
+            default:
+                return [];
                 break;
         }
-        return 0;
     }
 }

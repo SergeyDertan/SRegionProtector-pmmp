@@ -33,8 +33,9 @@ final class RegionTeleportFlag extends RegionFlag
         return Position::fromObject($this->position, $level);
     }
 
-    public function setPosition(Position $position): void
+    public function setPosition(?Position $position): void
     {
+        if ($position === null) return;
         $this->position = $position->asVector3();
         $this->level = $position->level->getName();
     }

@@ -78,6 +78,10 @@ final class Region
      * @var Chunk[]
      */
     private $chunks = [];
+    /**
+     * @var int
+     */
+    private $size;
 
     public function __construct(string $name, string $creator, string $level, int $minX, int $minY, int $minZ, int $maxX, int $maxY, int $maxZ, array $owners = [], array $members = [], ?array $flags = null, int $priority = 0)
     {
@@ -101,6 +105,8 @@ final class Region
         $this->flags = $flags;
 
         $this->priority = $priority;
+
+        $this->size = (int)($this->maxX - $this->minX) * ($this->maxY - $this->minY) * ($this->maxZ - $this->minZ);
     }
 
     public function addChunk(Chunk $chunk): void
@@ -179,7 +185,7 @@ final class Region
         $this->needUpdate = true;
     }
 
-    public function setTeleportFlag(Position $pos, bool $state): void
+    public function setTeleportFlag(?Position $pos, bool $state): void
     {
         /**
          * @var RegionTeleportFlag $flag
@@ -351,9 +357,9 @@ final class Region
 
     public function intersectsWith(AxisAlignedBB $bb, float $epsilon = 0.00001): bool
     {
-        if ($bb->maxX - $this->minX > $epsilon and $this->maxX - $bb->minX > $epsilon) {
-            if ($bb->maxY - $this->minY > $epsilon and $this->maxY - $bb->minY > $epsilon) {
-                return $bb->maxZ - $this->minZ > $epsilon and $this->maxZ - $bb->minZ > $epsilon;
+        if ($bb->maxX - $this->minX > $epsilon && $this->maxX - $bb->minX > $epsilon) {
+            if ($bb->maxY - $this->minY > $epsilon && $this->maxY - $bb->minY > $epsilon) {
+                return $bb->maxZ - $this->minZ > $epsilon && $this->maxZ - $bb->minZ > $epsilon;
             }
         }
         return false;
@@ -379,5 +385,20 @@ final class Region
         $y = $this->minY + ($this->maxY - $this->minY) / 2;
         $z = $this->minZ + ($this->maxZ - $this->minZ) / 2;
         return new Vector3($x, $y, $z);
+    }
+
+    public function getMin(): Vector3
+    {
+        return new Vector3($this->minX, $this->minY, $this->minZ);
+    }
+
+    public function getMax(): Vector3
+    {
+        return new Vector3($this->maxX, $this->maxY, $this->maxZ);
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
     }
 }

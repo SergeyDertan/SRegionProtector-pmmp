@@ -41,7 +41,7 @@ class MainPage extends Page
                     $region->getLevel(),
                     $region->getCreator(),
                     (string)$region->getPriority(),
-                    (string)(($region->getMaxX() - $region->getMinX()) * ($region->getMaxY() - $region->getMinY()) * ($region->getMaxZ() - $region->getMinZ()))
+                    (string)$region->getSize()
                 ]
             )
         ]);
