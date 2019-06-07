@@ -322,4 +322,40 @@ final class RegionManager
                 break;
         }
     }
+
+    public function addMember(Region $region, string $target): void
+    {
+        $target = strtolower($target);
+        $region->addMember($target);
+
+        if (!isset($this->members[$target])) $this->members[$target] = [];
+        $this->members[$target][] = $region;
+    }
+
+    public function addOwner(Region $region, string $target): void
+    {
+        $target = strtolower($target);
+        $region->addOwner($target);
+
+        if (!isset($this->owners[$target])) $this->owners[$target] = [];
+        $this->owners[$target][] = $region;
+    }
+
+    public function removeMember(Region $region, string $target): void
+    {
+        $target = strtolower($target);
+
+        $region->removeMember($target);
+        unset($this->members[$target][array_search($region, $this->members[$target])]);
+        if (empty($this->members[$target])) unset($this->members[$target]);
+    }
+
+    public function removeOwner(Region $region, string $target): void
+    {
+        $target = strtolower($target);
+
+        $region->removeOwner($target);
+        unset($this->owners[$target][array_search($region, $this->owners[$target])]);
+        if (empty($this->owners[$target])) unset($this->owners[$target]);
+    }
 }
