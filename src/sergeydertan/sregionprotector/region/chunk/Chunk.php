@@ -9,11 +9,11 @@ final class Chunk
 {
     private static $regionComparator = null;
     /**
-     * @var float
+     * @var int
      */
     private $x;
     /**
-     * @var float
+     * @var int
      */
     private $z;
 
@@ -22,7 +22,7 @@ final class Chunk
      */
     private $regions = [];
 
-    public function __construct(float $x, float $z)
+    public function __construct(int $x, int $z)
     {
         $this->x = $x;
         $this->z = $z;
@@ -33,12 +33,12 @@ final class Chunk
         }
     }
 
-    public function getX(): float
+    public function getX(): int
     {
         return $this->x;
     }
 
-    public function getZ(): float
+    public function getZ(): int
     {
         return $this->z;
     }

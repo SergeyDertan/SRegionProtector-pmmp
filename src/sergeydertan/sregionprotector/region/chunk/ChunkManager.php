@@ -140,4 +140,13 @@ final class ChunkManager
         }
         return $chunks;
     }
+
+    /**
+     * @param string $level
+     * @return Chunk[]
+     */
+    public function getLevelChunks(string $level): array
+    {
+        return isset($this->chunks[$level]) ? $this->chunks[$level] : [];
+    }
 }
