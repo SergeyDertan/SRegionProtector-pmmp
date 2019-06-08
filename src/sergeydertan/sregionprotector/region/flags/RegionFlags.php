@@ -125,6 +125,7 @@ abstract class RegionFlags
         self::$state[self::FLAG_SMART_DOORS] = false;
         self::$state[self::FLAG_MINEFARM] = false;
         self::$state[self::FLAG_FALL_DAMAGE] = false;
+        self::$state[self::FLAG_EXPLODE_BLOCK_BREAK] = false;
     }
 
     public static function getFlagId(string $name): int
