@@ -4,9 +4,6 @@ language: "default"
 provider: yaml
 #when enabled only /rg and /region commands will be shown
 hide-commands: false
-#when enabled /rg and /region commands will be executed asyncly
-async-commands: true
-async-commands-threads: -1
 
 lpos-max-radius: 250
 
@@ -14,9 +11,6 @@ priority-system: false
 
 update-notifier: true
 
-#multithreaded regions loading
-multithreaded-loading: true
-multithreaded-loading-threads: -1
 # "20", "20:2"
 border-block: "20"
 #1 second = 20 ticks
