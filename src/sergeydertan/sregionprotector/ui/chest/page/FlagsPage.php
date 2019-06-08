@@ -92,7 +92,7 @@ class FlagsPage extends Page
             //TODO set nbt
             $list[++$counter] = $item;
         }
-        $this->prepareItems($list);
+        $this->prepareItems($list, $page);
         return $list;
     }
 

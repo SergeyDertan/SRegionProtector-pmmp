@@ -46,7 +46,7 @@ class MembersPage extends Page
             $item->setNamedTag($nbt);
             $list[++$counter] = $item;
         }
-        $this->prepareItems($list);
+        $this->prepareItems($list, $page);
         return $list;
     }
 

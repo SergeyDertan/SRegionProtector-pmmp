@@ -286,7 +286,7 @@ final class SRegionProtectorMain extends PluginBase
 
     private function initUI(): void
     {
-        Page::initDefaultPages();
+        Page::init();
     }
 
     public function getRegionsFolder(): string

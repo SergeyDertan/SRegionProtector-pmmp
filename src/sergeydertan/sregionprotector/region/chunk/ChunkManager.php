@@ -61,7 +61,7 @@ final class ChunkManager
 
     public function getRegion(Vector3 $pos, string $level): ?Region
     {
-        $chunk = $this->getChunk($pos->x, $pos->z, $level);
+        $chunk = $this->getChunk((int)$pos->x, (int)$pos->z, $level);
         if ($chunk === null) return null;
         foreach ($chunk->getRegions() as $region) {
             if ($region->isVectorInside($pos)) return $region;

@@ -7,6 +7,7 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
+use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\region\Region;
 use sergeydertan\sregionprotector\util\Tags;
 
@@ -31,7 +32,7 @@ abstract class Page
         return isset(self::$pages[$name]) ? self::$pages[$name] : null;
     }
 
-    public static function initDefaultPages(): void
+    public static function init(): void
     {
         self::$mainPage = new MainPage();
         self::$flagsPage = new FlagsPage();
@@ -46,25 +47,22 @@ abstract class Page
         self::$pages[self::$membersPage->getName()] = self::$membersPage;
         self::$pages[self::$ownersPage->getName()] = self::$ownersPage;
         self::$pages[self::$removeRegionPage->getName()] = self::$removeRegionPage;
-    }
-
-    public static function init(): void
-    {
-        $nbt = new CompoundTag();
-        $nbt->setByte(Tags::PREVIOUS_PAGE_TAG, 1);//TODO name
-        self::$navigatorsCache[21] = Item::get(ItemIds::APPLE)->setNamedTag($nbt);
 
         $nbt = new CompoundTag();
-        $nbt->setByte(Tags::REFRESH_PAGE_TAG, 1);//TODO name
-        self::$navigatorsCache[22] = Item::get(ItemIds::COOKIE)->setNamedTag($nbt);
+        $nbt->setByte(Tags::PREVIOUS_PAGE_TAG, 1);
+        self::$navigatorsCache[21] = Item::get(ItemIds::APPLE)->setNamedTag($nbt)->setCustomName(Messenger::getInstance()->getMessage("gui.navigator.previous-page"));
 
         $nbt = new CompoundTag();
-        $nbt->setByte(Tags::NEXT_PAGE_TAG, 1);//TODO name
-        self::$navigatorsCache[23] = Item::get(ItemIds::APPLE)->setNamedTag($nbt);
+        $nbt->setByte(Tags::REFRESH_PAGE_TAG, 1);
+        self::$navigatorsCache[22] = Item::get(ItemIds::COOKIE)->setNamedTag($nbt)->setCustomName(Messenger::getInstance()->getMessage("gui.navigator.refresh"));
 
         $nbt = new CompoundTag();
-        $nbt->setString(Tags::OPEN_PAGE_TAG, self::$mainPage->getName());//TODO name
-        self::$navigatorsCache[23] = Item::get(ItemIds::SLIME_BALL)->setNamedTag($nbt);
+        $nbt->setByte(Tags::NEXT_PAGE_TAG, 1);
+        self::$navigatorsCache[23] = Item::get(ItemIds::APPLE)->setNamedTag($nbt)->setCustomName(Messenger::getInstance()->getMessage("gui.navigator.next-page"));
+
+        $nbt = new CompoundTag();
+        $nbt->setString(Tags::OPEN_PAGE_TAG, self::$mainPage->getName());
+        self::$navigatorsCache[26] = Item::get(ItemIds::SLIME_BALL)->setNamedTag($nbt)->setCustomName(Messenger::getInstance()->getMessage("gui.navigator.back"));
     }
 
     /**
