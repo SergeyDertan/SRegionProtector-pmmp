@@ -21,7 +21,20 @@ use sergeydertan\sregionprotector\command\creation\Pos2Command;
 use sergeydertan\sregionprotector\command\creation\RegionExpandCommand;
 use sergeydertan\sregionprotector\command\creation\RegionSizeCommand;
 use sergeydertan\sregionprotector\command\creation\ShowBorderCommand;
+use sergeydertan\sregionprotector\command\manage\CopyFlagsCommand;
+use sergeydertan\sregionprotector\command\manage\group\AddMemberCommand;
+use sergeydertan\sregionprotector\command\manage\group\AddOwnerCommand;
+use sergeydertan\sregionprotector\command\manage\group\RemoveMemberCommand;
+use sergeydertan\sregionprotector\command\manage\group\RemoveOwnerCommand;
 use sergeydertan\sregionprotector\command\manage\OpenUICommand;
+use sergeydertan\sregionprotector\command\manage\RegionFlagCommand;
+use sergeydertan\sregionprotector\command\manage\RegionInfoCommand;
+use sergeydertan\sregionprotector\command\manage\RegionListCommand;
+use sergeydertan\sregionprotector\command\manage\RegionRemoveCommand;
+use sergeydertan\sregionprotector\command\manage\RegionSelectCommand;
+use sergeydertan\sregionprotector\command\manage\RegionTeleportCommand;
+use sergeydertan\sregionprotector\command\manage\RemoveBordersCommand;
+use sergeydertan\sregionprotector\command\manage\SetPriorityCommand;
 use sergeydertan\sregionprotector\command\RegionCommand;
 use sergeydertan\sregionprotector\event\RegionEventsHandler;
 use sergeydertan\sregionprotector\event\SelectorEventsHandler;
@@ -218,6 +231,32 @@ final class SRegionProtectorMain extends PluginBase
         $this->registerCommand(new ShowBorderCommand($this->regionSelector, $this->settings->getMaxBordersAmount()));
 
         $this->registerCommand(new OpenUICommand($this->regionManager, $this->chunkManager, $this->settings->getUiType()));
+
+        $this->registerCommand(new CopyFlagsCommand($this->regionManager));
+
+        $this->registerCommand(new RegionFlagCommand($this->regionManager));
+
+        $this->registerCommand(new RegionInfoCommand($this->regionManager, $this->chunkManager, $this->settings->getRegionSettings()));
+
+        $this->registerCommand(new RegionListCommand($this->regionManager));
+
+        $this->registerCommand(new RegionRemoveCommand($this->regionManager));
+
+        $this->registerCommand(new RegionSelectCommand($this->regionManager, $this->regionSelector, $this->settings->getMaxBordersAmount()));
+
+        $this->registerCommand(new RegionTeleportCommand($this->regionManager));
+
+        $this->registerCommand(new RemoveBordersCommand($this->regionSelector));
+
+        $this->registerCommand(new SetPriorityCommand($this->regionManager, $this->settings->isPrioritySystem()));
+
+        $this->registerCommand(new AddMemberCommand($this->regionManager));
+
+        $this->registerCommand(new AddOwnerCommand($this->regionManager));
+
+        $this->registerCommand(new RemoveMemberCommand($this->regionManager));
+
+        $this->registerCommand(new RemoveOwnerCommand($this->regionManager));
     }
 
     private function registerCommand(Command $command): void
