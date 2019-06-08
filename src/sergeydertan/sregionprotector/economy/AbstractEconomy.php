@@ -7,9 +7,9 @@ use pocketmine\Player;
 
 interface AbstractEconomy
 {
-    public function getMoney(Player $player): float ;
+    public function getMoney(string $player): float ;
 
-    public function addMoney(Player $player, float $amount): void;
+    public function addMoney(string $player, float $amount): void;
 
-    public function reduceMoney(Player $player, float $amount): void;
+    public function reduceMoney(string $player, float $amount): void;
 }

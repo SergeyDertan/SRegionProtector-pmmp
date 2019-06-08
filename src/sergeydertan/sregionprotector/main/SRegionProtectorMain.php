@@ -27,6 +27,10 @@ use sergeydertan\sregionprotector\command\manage\group\AddOwnerCommand;
 use sergeydertan\sregionprotector\command\manage\group\RemoveMemberCommand;
 use sergeydertan\sregionprotector\command\manage\group\RemoveOwnerCommand;
 use sergeydertan\sregionprotector\command\manage\OpenUICommand;
+use sergeydertan\sregionprotector\command\manage\purchase\BuyRegionCommand;
+use sergeydertan\sregionprotector\command\manage\purchase\RegionPriceCommand;
+use sergeydertan\sregionprotector\command\manage\purchase\RegionRemoveFromSaleCommand;
+use sergeydertan\sregionprotector\command\manage\purchase\RegionSellCommand;
 use sergeydertan\sregionprotector\command\manage\RegionFlagCommand;
 use sergeydertan\sregionprotector\command\manage\RegionInfoCommand;
 use sergeydertan\sregionprotector\command\manage\RegionListCommand;
@@ -36,6 +40,7 @@ use sergeydertan\sregionprotector\command\manage\RegionTeleportCommand;
 use sergeydertan\sregionprotector\command\manage\RemoveBordersCommand;
 use sergeydertan\sregionprotector\command\manage\SetPriorityCommand;
 use sergeydertan\sregionprotector\command\RegionCommand;
+use sergeydertan\sregionprotector\economy\OneBoneEconomyAPI;
 use sergeydertan\sregionprotector\event\RegionEventsHandler;
 use sergeydertan\sregionprotector\event\SelectorEventsHandler;
 use sergeydertan\sregionprotector\event\UIEventsHandler;
@@ -257,6 +262,19 @@ final class SRegionProtectorMain extends PluginBase
         $this->registerCommand(new RemoveMemberCommand($this->regionManager));
 
         $this->registerCommand(new RemoveOwnerCommand($this->regionManager));
+
+        $economy = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+        if ($economy !== null) {
+            $economy = new OneBoneEconomyAPI();
+        }
+
+        $this->registerCommand(new BuyRegionCommand($this->regionManager, $economy));
+
+        $this->registerCommand(new RegionPriceCommand($this->regionManager));
+
+        $this->registerCommand(new RegionRemoveFromSaleCommand($this->regionManager));
+
+        $this->registerCommand(new RegionSellCommand($this->regionManager));
     }
 
     private function registerCommand(Command $command): void

@@ -4,21 +4,20 @@ declare(strict_types=1);
 namespace sergeydertan\sregionprotector\economy;
 
 use onebone\economyapi\EconomyAPI;
-use pocketmine\Player;
 
 final class OneBoneEconomyAPI implements AbstractEconomy
 {
-    public function addMoney(Player $player, float $amount): void
+    public function addMoney(string $player, float $amount): void
     {
         EconomyAPI::getInstance()->addMoney($player, $amount);
     }
 
-    public function reduceMoney(Player $player, float $amount): void
+    public function reduceMoney(string $player, float $amount): void
     {
         EconomyAPI::getInstance()->reduceMoney($player, $amount);
     }
 
-    public function getMoney(Player $player): float
+    public function getMoney(string $player): float
     {
         return (int)EconomyAPI::getInstance()->myMoney($player);
     }

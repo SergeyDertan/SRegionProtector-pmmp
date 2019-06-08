@@ -52,7 +52,7 @@ abstract class SRegionProtectorCommand extends Command
         return false;
     }
 
-    protected function checkUsage(CommandSender $target, int $requiredArguments, array $args): bool
+    protected function checkUsage(CommandSender $target, int $requiredArguments, array &$args): bool
     {
         if (count($args) >= $requiredArguments) return true;
         $this->messenger->sendMessage($target, "command.{$this->msg}.usage");
