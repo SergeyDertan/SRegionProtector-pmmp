@@ -12,6 +12,7 @@ use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use RuntimeException;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
+use sergeydertan\sregionprotector\command\admin\SaveCommand;
 use sergeydertan\sregionprotector\command\creation\CreateRegionCommand;
 use sergeydertan\sregionprotector\command\creation\GetWandCommand;
 use sergeydertan\sregionprotector\command\creation\LPos1Command;
@@ -275,6 +276,8 @@ final class SRegionProtectorMain extends PluginBase
         $this->registerCommand(new RegionRemoveFromSaleCommand($this->regionManager));
 
         $this->registerCommand(new RegionSellCommand($this->regionManager));
+
+        $this->registerCommand(new SaveCommand($this));
     }
 
     private function registerCommand(Command $command): void
