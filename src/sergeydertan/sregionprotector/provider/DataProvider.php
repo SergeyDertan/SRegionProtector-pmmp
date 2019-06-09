@@ -25,7 +25,7 @@ abstract class DataProvider
 
     public abstract function saveRegion(Region $region): void;
 
-    public abstract function loadRegion(string $name); //TODO return type
+    public abstract function loadRegion(string $name): array;
 
     /**
      * id(nothing) -> region data array
