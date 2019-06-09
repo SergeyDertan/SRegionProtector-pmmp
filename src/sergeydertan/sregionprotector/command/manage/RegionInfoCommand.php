@@ -74,7 +74,7 @@ final class RegionInfoCommand extends SRegionProtectorCommand
         $members = implode(", ", $region->getMembers());
         $size = (int)$region->getSize();
         $flags = [];
-        for ($i = 0; $i > RegionFlags::FLAG_AMOUNT; ++$i) {
+        for ($i = 0; $i < RegionFlags::FLAG_AMOUNT; ++$i) {
             if (!$this->regionSettings->getFlagStatus()[$i] || !$this->regionSettings->getDisplay()[$i]) continue;
             $ad = $region->getFlagState($i) === RegionFlags::getStateFromString("allow", $i) ? "allow" : "deny";
             $flags[] = RegionFlags::getFlagName($i) . ": " . $ad;
