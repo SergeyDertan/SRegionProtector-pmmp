@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\util;
 
-use http\Exception\RuntimeException;
+use Exception;
 use Phar;
 use pocketmine\utils\Config;
+use RuntimeException;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 
 abstract class Utils
@@ -31,6 +32,26 @@ abstract class Utils
         if (self::copyArrayOfArrays($src, $tt, $removeAbsent)) {
             $trg->setAll($tt);
             $trg->save();
+        }
+    }
+
+    public static function httpRequest(string $url): ?string
+    {
+        try {
+            $req = curl_init();
+
+            curl_setopt($req, CURLOPT_URL, $url);
+            curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($req, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($req, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($req, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($req, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0");
+
+            $data = curl_exec($req);
+            curl_close($req);
+            return $data;
+        } catch (Exception $ignore) {
+            return null;
         }
     }
 

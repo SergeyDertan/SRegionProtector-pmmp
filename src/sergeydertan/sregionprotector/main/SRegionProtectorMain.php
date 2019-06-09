@@ -42,6 +42,7 @@ use sergeydertan\sregionprotector\command\manage\RemoveBordersCommand;
 use sergeydertan\sregionprotector\command\manage\SetPriorityCommand;
 use sergeydertan\sregionprotector\command\RegionCommand;
 use sergeydertan\sregionprotector\economy\OneBoneEconomyAPI;
+use sergeydertan\sregionprotector\event\NotifierEventsHandler;
 use sergeydertan\sregionprotector\event\RegionEventsHandler;
 use sergeydertan\sregionprotector\event\SelectorEventsHandler;
 use sergeydertan\sregionprotector\event\UIEventsHandler;
@@ -57,7 +58,7 @@ use sergeydertan\sregionprotector\util\Utils;
 
 final class SRegionProtectorMain extends PluginBase
 {
-    private const VERSION_URL = "";
+    private const VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector-pmmp/releases/latest";
     /**
      * @var SRegionProtectorMain
      */
@@ -133,7 +134,46 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.successful", ["@time"], [(string)(Utils::currentTimeMillis() - $start)]));
 
-        //TODO check update
+        $this->checkUpdate();
+    }
+
+    /**
+     * $ch = curl_init();
+     *
+     * //Set the URL that you want to GET by using the CURLOPT_URL option.
+     * curl_setopt($ch, CURLOPT_URL, 'http://google.com');
+     *
+     * //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
+     * curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+     *
+     * //Set CURLOPT_FOLLOWLOCATION to true to follow redirects.
+     * curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+     *
+     * //Execute the request.
+     * $data = curl_exec($ch);
+     *
+     * //Close the cURL handle.
+     * curl_close($ch);
+     */
+    private function checkUpdate(): void
+    {
+        try {
+            $data = Utils::httpRequest(static::VERSION_URL);
+
+            $ver = (string)$data["tag_name"];
+            $description = (string)$data["name"];
+
+
+            if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
+                $this->getLogger()->info($this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
+                $this->getLogger()->info($this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
+
+                if ($this->settings->isUpdateNotifier()) {
+                    $this->getServer()->getPluginManager()->registerEvents(new NotifierEventsHandler($ver, $description), $this);
+                }
+            }
+        } catch (Exception $ignore) {
+        }
     }
 
     private function createDirectories(): bool

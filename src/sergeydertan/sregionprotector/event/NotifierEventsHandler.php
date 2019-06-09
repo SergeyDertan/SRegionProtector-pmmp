@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\event;
 
+use pocketmine\event\Listener;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\network\mcpe\protocol\SetLocalPlayerAsInitializedPacket;
 use pocketmine\utils\TextFormat;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\util\Pair;
 
-final class NotifierEventsHandler
+final class NotifierEventsHandler implements Listener
 {
     /**
      * @var Pair
