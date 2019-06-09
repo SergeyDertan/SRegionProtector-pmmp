@@ -62,7 +62,7 @@ final class RegionSettings
      */
     private $healFlagHealDelay;
     /**
-     * @var int
+     * @var float
      */
     private $healFlagHealAmount;
 
@@ -111,7 +111,7 @@ final class RegionSettings
     private function loadHealFlagSettings(array $cnf): void
     {
         $this->healFlagHealDelay = (int)$cnf["heal-flag-heal-delay"];
-        $this->healFlagHealAmount = (int)$cnf["heal-flag-heal-amount"];
+        $this->healFlagHealAmount = (float)$cnf["heal-flag-heal-amount"];
 
         BlockEntityHealer::$HEAL_DELAY = $this->healFlagHealDelay;
         BlockEntityHealer::$HEAL_AMOUNT = $this->healFlagHealAmount;

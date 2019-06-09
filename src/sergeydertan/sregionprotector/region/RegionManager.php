@@ -7,8 +7,8 @@ use Logger;
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
-use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
+use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\main\SaveType;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\provider\DataProvider;
@@ -101,8 +101,8 @@ final class RegionManager
         $this->owners[$creator][] = $region;
 
         foreach ($this->chunkManager->getRegionChunks(
-            new Vector3($minX, $minY, $minZ),
-            new Vector3($maxX, $maxY, $maxZ),
+            $region->getMin(),
+            $region->getMax(),
             $level->getName(), true
         ) as $chunk) {
             $chunk->addRegion($region);
@@ -110,7 +110,7 @@ final class RegionManager
         }
         $this->regions[strtolower($region->getName())] = $region;
 
-        //new BlockEntityHealer($level) TODO
+        new BlockEntityHealer($level, BlockEntityHealer::getDefaultNBT($region->getHealerVector(), $name));
         $region->needUpdate = true;
         return $region;
     }

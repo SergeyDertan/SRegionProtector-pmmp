@@ -3,21 +3,32 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\blockentity;
 
+use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\tile\Spawnable;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
 use sergeydertan\sregionprotector\region\RegionManager;
+use sergeydertan\sregionprotector\util\Tags;
 
 final class BlockEntityHealer extends Spawnable
 {
     const BLOCK_ENTITY_HEALER = "RegionHealer";
-
+    /**
+     * @var int
+     */
     static $HEAL_DELAY;
+    /**
+     * @var float
+     */
     static $HEAL_AMOUNT;
+    /**
+     * @var bool
+     */
     static $FLAG_ENABLED;
 
     /**
@@ -40,10 +51,7 @@ final class BlockEntityHealer extends Spawnable
     public function __construct(Level $level, CompoundTag $nbt)
     {
         parent::__construct($level, $nbt);
-        $this->region = $nbt->getString("region");
         $this->regionManager = SRegionProtectorMain::getInstance()->getRegionManager();
-
-        $this->bb = $this->regionManager->getRegion($this->region)->getBoundingBox();
 
         $this->delay = self::$HEAL_DELAY;
     }
@@ -58,7 +66,7 @@ final class BlockEntityHealer extends Spawnable
         if (--$this->delay > 0) return true;
         foreach ($this->level->getNearbyEntities($this->bb) as $entity) {
             if (!$entity instanceof Player) continue;
-            $entity->setHealth($entity->getHealth() + self::$HEAL_AMOUNT); //TODO heal
+            $entity->heal(new EntityRegainHealthEvent($entity, self::$HEAL_AMOUNT, EntityRegainHealthEvent::CAUSE_CUSTOM));
         }
         $this->delay = self::$HEAL_DELAY;
         return true;
@@ -76,19 +84,27 @@ final class BlockEntityHealer extends Spawnable
 
     protected function writeSaveData(CompoundTag $nbt): void
     {
-        $nbt->setString("id", self::BLOCK_ENTITY_HEALER);
-        $nbt->setString("region", $this->region);
-        $nbt->setInt("x", $this->x);
-        $nbt->setInt("y", $this->y);
-        $nbt->setInt("z", $this->z);
+        $nbt->setString(Tags::ID_TAG, self::BLOCK_ENTITY_HEALER);
+        $nbt->setString(Tags::REGION_TAG, $this->region);
+        $nbt->setInt(Tags::X_TAG, $this->x);
+        $nbt->setInt(Tags::Y_TAG, $this->y);
+        $nbt->setInt(Tags::Z_TAG, $this->z);
     }
 
     protected function addAdditionalSpawnData(CompoundTag $nbt): void
     {
     }
 
+    public static function getDefaultNBT(Vector3 $pos, string $region): CompoundTag
+    {
+        $nbt = parent::createNBT($pos);
+        $nbt->setString(Tags::REGION_TAG, $region);
+        return $nbt;
+    }
+
     protected function readSaveData(CompoundTag $nbt): void
     {
-        $this->region = $nbt->getString("region");
+        $this->region = $nbt->getString(Tags::REGION_TAG);
+        $this->bb = $this->regionManager->getRegion($this->region)->getBoundingBox();
     }
 }
