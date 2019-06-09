@@ -106,8 +106,6 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.start", ["@ver"], [$this->getDescription()->getVersion()]));
 
-        //TODO remove lib msg
-
         $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.settings"));
         $this->initSettings();
 

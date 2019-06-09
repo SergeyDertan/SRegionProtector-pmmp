@@ -48,7 +48,7 @@ class FlagsPage extends Page
         self::$flagToBlock[RegionFlags::FLAG_MINEFARM] = BlockIds::DIAMOND_ORE;
         self::$flagToBlock[RegionFlags::FLAG_POTION_LAUNCH] = ItemIds::SPLASH_POTION;
         self::$flagToBlock[RegionFlags::FLAG_HEAL] = ItemIds::GOLDEN_APPLE;
-        //self::$flagToBlock[RegionFlags::FLAG_NETHER_PORTAL] = BlockIds::NETHER_BRICK_BLOCK; TODO
+        self::$flagToBlock[RegionFlags::FLAG_NETHER_PORTAL] = ItemIds::NETHER_REACTOR;
         self::$flagToBlock[RegionFlags::FLAG_SELL] = ItemIds::EMERALD;
         self::$flagToBlock[RegionFlags::FLAG_FRAME_ITEM_DROP] = ItemIds::ITEM_FRAME;
         self::$flagToBlock[RegionFlags::FLAG_BUCKET_EMPTY] = ItemIds::BUCKET;
@@ -89,7 +89,6 @@ class FlagsPage extends Page
             $item->setLore($lore);
             $nbt = $item->getNamedTag();
             $nbt->setInt(Tags::FLAG_ID_TAG, $flagId);
-            //TODO set nbt
             $list[++$counter] = $item;
         }
         $this->prepareItems($list, $page);

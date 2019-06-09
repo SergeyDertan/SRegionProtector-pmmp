@@ -90,7 +90,7 @@ final class SelectorSession
         return true;
     }
 
-    public function fixHeight(): void //TODO nether & normal
+    public function fixHeight(): void //TODO get dimension
     {
         if ($this->pos1->y > 255) $this->pos1->y = 255;
         if ($this->pos2->y > 255) $this->pos2->y = 255;
