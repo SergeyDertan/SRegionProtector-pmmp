@@ -159,18 +159,18 @@ abstract class Utils
         throw new RuntimeException("Unreachable code reached");
     }
 
-    public static function startsWith(string $haystack, string $needle): bool
+    public static function startsWith(string $haystack, string $needle, bool $caseInsensitive = true): bool
     {
         $length = strlen($needle);
-        return (substr($haystack, 0, $length) === $needle);
+        return $caseInsensitive ? strcasecmp(substr($haystack, 0, $length), $needle) === 0 : substr($haystack, 0, $length) === $needle;
     }
 
-    public static function endsWith(string $haystack, string $needle): bool
+    public static function endsWith(string $haystack, string $needle, bool $caseInsensitive = true): bool
     {
         $length = strlen($needle);
         if ($length == 0) {
             return true;
         }
-        return (substr($haystack, -$length) === $needle);
+        return $caseInsensitive ? strcasecmp(substr($haystack, -$length), $needle) === 0 : substr($haystack, -$length) === $needle;
     }
 }
