@@ -163,7 +163,6 @@ final class SRegionProtectorMain extends PluginBase
             $ver = (string)$data["tag_name"];
             $description = (string)$data["name"];
 
-
             if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
                 $this->getLogger()->info($this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
                 $this->getLogger()->info($this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
