@@ -45,7 +45,8 @@ class Messenger
         if ($lang === null) {
             $lang = Server::getInstance()->getLanguage()->getLang();
         }
-        if (!Utils::resourceExists("$lang.yml")) $lang = self::DEFAULT_LANGUAGE;
+        if (!Utils::resourceExists("lang/$lang.yml")) $lang = self::DEFAULT_LANGUAGE;
+
         Utils::copyResource("lang/$lang.yml");
 
         $this->language = $lang;

@@ -129,7 +129,7 @@ abstract class Utils
         if (SRegionProtectorMain::getInstance()->isPhar()) {
             //TODO
         } else {
-            return file_exists(SRegionProtectorMain::getInstance()->getFile() . "/$file");
+            return file_exists(SRegionProtectorMain::getInstance()->getFile() . "/resources/$file");
         }
     }
 

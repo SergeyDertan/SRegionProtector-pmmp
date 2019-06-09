@@ -147,8 +147,8 @@ final class SRegionProtectorMain extends PluginBase
             $description = (string)$data["name"];
 
             if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
-                $this->getLogger()->info($this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
-                $this->getLogger()->info($this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
 
                 if ($this->settings->isUpdateNotifier()) {
                     $this->getServer()->getPluginManager()->registerEvents(new NotifierEventsHandler($ver, $description), $this);
