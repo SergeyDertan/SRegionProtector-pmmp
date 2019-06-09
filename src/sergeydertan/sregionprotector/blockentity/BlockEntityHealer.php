@@ -10,7 +10,6 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\tile\Spawnable;
-use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
 use sergeydertan\sregionprotector\region\RegionManager;
 use sergeydertan\sregionprotector\util\Tags;
@@ -34,7 +33,7 @@ final class BlockEntityHealer extends Spawnable
     /**
      * @var RegionManager
      */
-    private $regionManager;
+    private static $regionManager;
     /**
      * @var AxisAlignedBB
      */
@@ -51,16 +50,20 @@ final class BlockEntityHealer extends Spawnable
     public function __construct(Level $level, CompoundTag $nbt)
     {
         parent::__construct($level, $nbt);
-        $this->regionManager = SRegionProtectorMain::getInstance()->getRegionManager();
 
         $this->delay = self::$HEAL_DELAY;
+    }
+
+    public static function setRegionManager(RegionManager $regionManager): void
+    {
+        static::$regionManager = $regionManager;
     }
 
     public function onUpdate(): bool
     {
         if ($this->closed) return false;
         if (!self::$FLAG_ENABLED) return true;
-        $region = $this->regionManager->getRegion($this->region);
+        $region = static::$regionManager->getRegion($this->region);
         if ($region === null) return false;
         if (!$region->getFlagState(RegionFlags::FLAG_HEAL)) return true;
         if (--$this->delay > 0) return true;
@@ -79,7 +82,7 @@ final class BlockEntityHealer extends Spawnable
 
     public function isValid(): bool
     {
-        return $this->regionManager->regionExists($this->region);
+        return static::$regionManager->regionExists($this->region);
     }
 
     protected function writeSaveData(CompoundTag $nbt): void
@@ -105,6 +108,6 @@ final class BlockEntityHealer extends Spawnable
     protected function readSaveData(CompoundTag $nbt): void
     {
         $this->region = $nbt->getString(Tags::REGION_TAG);
-        $this->bb = $this->regionManager->getRegion($this->region)->getBoundingBox();
+        $this->bb = static::$regionManager->getRegion($this->region)->getBoundingBox();
     }
 }

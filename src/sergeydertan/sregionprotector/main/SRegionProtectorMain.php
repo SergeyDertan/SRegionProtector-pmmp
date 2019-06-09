@@ -195,6 +195,8 @@ final class SRegionProtectorMain extends PluginBase
         $this->regionSelector = new RegionSelector($this->settings->getSelectorSessionLifetime(), $this->settings->getBorderBlock());
         $this->regionManager = new RegionManager($this->dataProvider, $this->getLogger(), $this->chunkManager);
         $this->regionManager->init($this->settings->getRegionSettings()->isSaveNewFlags());
+
+        BlockEntityHealer::setRegionManager($this->regionManager);
     }
 
     private function initEventsHandlers(): void
