@@ -6,6 +6,8 @@ namespace sergeydertan\sregionprotector\util;
 use Exception;
 use Phar;
 use pocketmine\utils\Config;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 
@@ -33,6 +35,20 @@ abstract class Utils
             $trg->setAll($tt);
             $trg->save();
         }
+    }
+
+    public static function removeDir(string $dir): void
+    {
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($dir);
     }
 
     public static function httpRequest(string $url): ?string
@@ -65,11 +81,12 @@ abstract class Utils
 
         @unlink($dir . $file);
         if (SRegionProtectorMain::getInstance()->isPhar()) {
-            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"]);
+            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
+            return $dir . '/resources/' . $file;
         } else {
             copy(SRegionProtectorMain::getInstance()->getFile() . "resources/$file", $dir . $file);
+            return $dir . $file;
         }
-        return $dir . $file;
     }
 
     /**
@@ -127,7 +144,9 @@ abstract class Utils
     public static function resourceExists(string $file): bool
     {
         if (SRegionProtectorMain::getInstance()->isPhar()) {
-            //TODO
+            @mkdir($dir = sys_get_temp_dir() . "/srp/", 0777, true);
+            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
+            return file_exists($dir . 'resources/' . $file);
         } else {
             return file_exists(SRegionProtectorMain::getInstance()->getFile() . "/resources/$file");
         }
