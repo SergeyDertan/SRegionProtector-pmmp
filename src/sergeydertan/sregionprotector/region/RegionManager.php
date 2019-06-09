@@ -8,7 +8,6 @@ use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
-use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\main\SaveType;

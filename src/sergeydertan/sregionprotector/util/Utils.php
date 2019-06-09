@@ -37,40 +37,6 @@ abstract class Utils
         }
     }
 
-    public static function removeDir(string $dir): void
-    {
-        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-        foreach ($files as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
-            }
-        }
-        rmdir($dir);
-    }
-
-    public static function httpRequest(string $url): ?string
-    {
-        try {
-            $req = curl_init();
-
-            curl_setopt($req, CURLOPT_URL, $url);
-            curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($req, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($req, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($req, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($req, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0");
-
-            $data = curl_exec($req);
-            curl_close($req);
-            return $data;
-        } catch (Exception $ignore) {
-            return null;
-        }
-    }
-
     public static function getResource(string $file): string
     {
         @mkdir($dir = sys_get_temp_dir() . "/srp/", 0777, true);
@@ -127,6 +93,40 @@ abstract class Utils
             if ($c) $changed = true;
         }
         return $changed;
+    }
+
+    public static function removeDir(string $dir): void
+    {
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($dir);
+    }
+
+    public static function httpRequest(string $url): ?string
+    {
+        try {
+            $req = curl_init();
+
+            curl_setopt($req, CURLOPT_URL, $url);
+            curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($req, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($req, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($req, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($req, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0");
+
+            $data = curl_exec($req);
+            curl_close($req);
+            return $data;
+        } catch (Exception $ignore) {
+            return null;
+        }
     }
 
     public static function currentTimeMillis(): int

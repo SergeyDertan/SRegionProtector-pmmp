@@ -65,7 +65,7 @@ final class BuyRegionCommand extends SRegionProtectorCommand
         }
         $this->economy->addMoney($target->getCreator(), $price);
         $this->economy->reduceMoney($sender->getName(), $price);
-        $this->regionManager->changeRegionOwner($target,$sender->getName());
-        $this->messenger->sendMessage($sender, "command.{$this->msg}.success",["@region","@price"],[$target->getName(),(string)$price]);
+        $this->regionManager->changeRegionOwner($target, $sender->getName());
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.success", ["@region", "@price"], [$target->getName(), (string)$price]);
     }
 }

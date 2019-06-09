@@ -96,6 +96,14 @@ final class SRegionProtectorMain extends PluginBase
      */
     private $mainCommand;
 
+    /**
+     * @return SRegionProtectorMain
+     */
+    public static function getInstance(): ?SRegionProtectorMain
+    {
+        return self::$INSTANCE;
+    }
+
     public function onEnable(): void
     {
         self::$INSTANCE = $this;
@@ -135,35 +143,6 @@ final class SRegionProtectorMain extends PluginBase
         $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.successful", ["@time"], [(string)(Utils::currentTimeMillis() - $start)]));
 
         $this->checkUpdate();
-    }
-
-    public function onDisable(): void
-    {
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.start", ["@ver"], [$this->getDescription()->getVersion()]));
-
-        $this->save(SaveType::DISABLING);
-        $this->dataProvider->close();
-    }
-
-    private function checkUpdate(): void
-    {
-        try {
-            $data = Utils::httpRequest(static::VERSION_URL);
-            $data = json_decode($data, true);
-
-            $ver = (string)$data["tag_name"];
-            $description = (string)$data["name"];
-
-            if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
-
-                if ($this->settings->isUpdateNotifier()) {
-                    $this->getServer()->getPluginManager()->registerEvents(new NotifierEventsHandler($ver, $description), $this);
-                }
-            }
-        } catch (Exception $ignore) {
-        }
     }
 
     private function createDirectories(): bool
@@ -333,6 +312,51 @@ final class SRegionProtectorMain extends PluginBase
         }, $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
     }
 
+    private function initSessionsClearTask(): void
+    {
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new class extends Task
+        {
+            public function onRun(int $tick): void
+            {
+                SRegionProtectorMain::getInstance()->getRegionSelector()->clear();
+            }
+        }, $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
+    }
+
+    private function initUI(): void
+    {
+        Page::init();
+    }
+
+    private function checkUpdate(): void
+    {
+        try {
+            $data = Utils::httpRequest(static::VERSION_URL);
+            $data = json_decode($data, true);
+
+            $ver = (string)$data["tag_name"];
+            $description = (string)$data["name"];
+
+            if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
+
+                if ($this->settings->isUpdateNotifier()) {
+                    $this->getServer()->getPluginManager()->registerEvents(new NotifierEventsHandler($ver, $description), $this);
+                }
+            }
+        } catch (Exception $ignore) {
+        }
+    }
+
+    public function onDisable(): void
+    {
+        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.start", ["@ver"], [$this->getDescription()->getVersion()]));
+
+        $this->save(SaveType::DISABLING);
+        $this->dataProvider->close();
+    }
+
     public function save(int $type, string $initiator = null): void
     {
         switch ($type) {
@@ -350,33 +374,9 @@ final class SRegionProtectorMain extends PluginBase
         $this->regionManager->save($type, $initiator);
     }
 
-    /**
-     * @return SRegionProtectorMain
-     */
-    public static function getInstance(): ?SRegionProtectorMain
-    {
-        return self::$INSTANCE;
-    }
-
-    private function initSessionsClearTask(): void
-    {
-        $this->getScheduler()->scheduleDelayedRepeatingTask(new class extends Task
-        {
-            public function onRun(int $tick): void
-            {
-                SRegionProtectorMain::getInstance()->getRegionSelector()->clear();
-            }
-        }, $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
-    }
-
     public function getRegionSelector(): RegionSelector
     {
         return $this->regionSelector;
-    }
-
-    private function initUI(): void
-    {
-        Page::init();
     }
 
     public function getRegionsFolder(): string

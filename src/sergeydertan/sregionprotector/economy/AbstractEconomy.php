@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\economy;
 
-use pocketmine\Player;
-
 interface AbstractEconomy
 {
-    public function getMoney(string $player): float ;
+    public function getMoney(string $player): float;
 
     public function addMoney(string $player, float $amount): void;
 

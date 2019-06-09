@@ -59,6 +59,13 @@ final class BlockEntityHealer extends Spawnable
         static::$regionManager = $regionManager;
     }
 
+    public static function getDefaultNBT(Vector3 $pos, string $region): CompoundTag
+    {
+        $nbt = parent::createNBT($pos);
+        $nbt->setString(Tags::REGION_TAG, $region);
+        return $nbt;
+    }
+
     public function onUpdate(): bool
     {
         if ($this->closed) return false;
@@ -96,13 +103,6 @@ final class BlockEntityHealer extends Spawnable
 
     protected function addAdditionalSpawnData(CompoundTag $nbt): void
     {
-    }
-
-    public static function getDefaultNBT(Vector3 $pos, string $region): CompoundTag
-    {
-        $nbt = parent::createNBT($pos);
-        $nbt->setString(Tags::REGION_TAG, $region);
-        return $nbt;
     }
 
     protected function readSaveData(CompoundTag $nbt): void

@@ -102,6 +102,40 @@ final class RegionEventsHandler implements Listener
         $this->handleEvent(RegionFlags::FLAG_BREAK, $e->getBlock(), $e, $e->getPlayer());
     }
 
+    private function handleEvent(int $flag, Position $pos, Event $event, Player $player = null, bool $mustBeMember = true, bool $checkPerm = true): void
+    {
+        if (!$this->flagStatus[$flag]) return;
+        if ($checkPerm && ($player !== null && $player->hasPermission("sregionprotector.admin"))) return;
+        $chunk = $this->chunkManager->getChunk((int)$pos->x, (int)$pos->z, $pos->level->getName(), true, false);
+        if ($chunk === null) return;
+
+        foreach ($chunk->getRegions() as $region) {
+            if (!$region->isVectorInside($pos) || ($player !== null && $mustBeMember && $region->isLivesIn($player->getName()))) {
+                continue;
+            }
+            if (!$region->getFlagState($flag)) {
+                if ($this->prioritySystem) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            if ($this->showParticle && $player !== null) {
+                $pos = $pos->asVector3();
+                if (fmod($pos->x, 1) + fmod($pos->y, 1) + fmod($pos->z, 1) === (float)0.0) {
+                    $pos = $pos->add(0.5, 1.3, 0.5);
+                }
+                $particle = new AngryVillagerParticle($pos);
+                $player->dataPacket($particle->encode());
+            }
+            $event->setCancelled();
+            if ($player !== null && $this->needMessage[$flag]) {
+                Messenger::getInstance()->sendMessage($player, "region.protected." . RegionFlags::getFlagName($flag), [], [], $this->protectedMessageType);
+            }
+            break;
+        }
+    }
+
     /**
      * place flag
      * @param BlockPlaceEvent $e
@@ -180,6 +214,30 @@ final class RegionEventsHandler implements Listener
         }
     }
 
+    //TODO entity spawn event
+
+    //TODO lighting strike event
+
+    //TODO block ignite event
+
+    private function canInteractWith(int $flag, Position $pos, Player $player): bool
+    {
+        if (!$this->flagStatus[$flag]) return false;
+        $chunk = $this->chunkManager->getChunk($pos->x, $pos->z, $pos->level->getName(), true, false);
+        if ($chunk === null) return false;
+        foreach ($chunk->getRegions() as $region) {
+            if (!$region->isVectorInside($pos)) continue;
+            if (!$region->getFlagState($flag)) {
+                if ($this->prioritySystem) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            return $region->isLivesIn($player->getName()) || $player->hasPermission("sregionprotector.admin");
+        }
+        return false;
+    }
 
     /**
      * pvp, mob damage, lightning strike & invincible flags
@@ -212,12 +270,6 @@ final class RegionEventsHandler implements Listener
             //TODO lighting strike
         }
     }
-
-    //TODO entity spawn event
-
-    //TODO lighting strike event
-
-    //TODO block ignite event
 
     /**
      * fire flag
@@ -314,6 +366,10 @@ final class RegionEventsHandler implements Listener
         $this->handleEvent(RegionFlags::FLAG_ITEM_DROP, $e->getPlayer(), $e, $e->getPlayer());
     }
 
+    //TODO redstone update flag
+
+    //TODO liquid flow flag
+
     /**
      * @param PlayerMoveEvent $e
      *
@@ -342,10 +398,6 @@ final class RegionEventsHandler implements Listener
         $this->handleEvent(RegionFlags::FLAG_HEALTH_REGEN, $ent, $e, $ent);
     }
 
-    //TODO redstone update flag
-
-    //TODO liquid flow flag
-
     /**
      * sleep flag
      * @param PlayerBedEnterEvent $e
@@ -357,6 +409,10 @@ final class RegionEventsHandler implements Listener
     {
         $this->handleEvent(RegionFlags::FLAG_SLEEP, $e->getBed(), $e, $e->getPlayer());
     }
+
+    //TODO frame item drop flag
+
+    //TODO prevent portal from spawning in region
 
     /**
      * chunk loader flag
@@ -395,10 +451,6 @@ final class RegionEventsHandler implements Listener
         }
     }
 
-    //TODO frame item drop flag
-
-    //TODO prevent portal from spawning in region
-
     /**
      * @param PlayerBucketFillEvent $e
      *
@@ -419,58 +471,5 @@ final class RegionEventsHandler implements Listener
     public function playerBucketEmpty(PlayerBucketEmptyEvent $e): void
     {
         $this->handleEvent(RegionFlags::FLAG_BUCKET_EMPTY, $e->getBlockClicked(), $e, $e->getPlayer());
-    }
-
-    private function canInteractWith(int $flag, Position $pos, Player $player): bool
-    {
-        if (!$this->flagStatus[$flag]) return false;
-        $chunk = $this->chunkManager->getChunk($pos->x, $pos->z, $pos->level->getName(), true, false);
-        if ($chunk === null) return false;
-        foreach ($chunk->getRegions() as $region) {
-            if (!$region->isVectorInside($pos)) continue;
-            if (!$region->getFlagState($flag)) {
-                if ($this->prioritySystem) {
-                    return false;
-                } else {
-                    continue;
-                }
-            }
-            return $region->isLivesIn($player->getName()) || $player->hasPermission("sregionprotector.admin");
-        }
-        return false;
-    }
-
-    private function handleEvent(int $flag, Position $pos, Event $event, Player $player = null, bool $mustBeMember = true, bool $checkPerm = true): void
-    {
-        if (!$this->flagStatus[$flag]) return;
-        if ($checkPerm && ($player !== null && $player->hasPermission("sregionprotector.admin"))) return;
-        $chunk = $this->chunkManager->getChunk((int)$pos->x, (int)$pos->z, $pos->level->getName(), true, false);
-        if ($chunk === null) return;
-
-        foreach ($chunk->getRegions() as $region) {
-            if (!$region->isVectorInside($pos) || ($player !== null && $mustBeMember && $region->isLivesIn($player->getName()))) {
-                continue;
-            }
-            if (!$region->getFlagState($flag)) {
-                if ($this->prioritySystem) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
-            if ($this->showParticle && $player !== null) {
-                $pos = $pos->asVector3();
-                if (fmod($pos->x, 1) + fmod($pos->y, 1) + fmod($pos->z, 1) === (float)0.0) {
-                    $pos = $pos->add(0.5, 1.3, 0.5);
-                }
-                $particle = new AngryVillagerParticle($pos);
-                $player->dataPacket($particle->encode());
-            }
-            $event->setCancelled();
-            if ($player !== null && $this->needMessage[$flag]) {
-                Messenger::getInstance()->sendMessage($player, "region.protected." . RegionFlags::getFlagName($flag), [], [], $this->protectedMessageType);
-            }
-            break;
-        }
     }
 }

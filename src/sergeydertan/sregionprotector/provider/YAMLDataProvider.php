@@ -66,11 +66,6 @@ final class YAMLDataProvider extends DataProvider
         $file->save();
     }
 
-    public function loadRegion(string $name): array
-    {
-        return (new Config(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($name) . ".yml", Config::YAML))->getAll();
-    }
-
     /**
      * @return array[]
      */
@@ -85,6 +80,11 @@ final class YAMLDataProvider extends DataProvider
             $regions[] = $this->loadRegion(str_replace(".yml", "", $file));
         }
         return $regions;
+    }
+
+    public function loadRegion(string $name): array
+    {
+        return (new Config(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($name) . ".yml", Config::YAML))->getAll();
     }
 
     public function removeRegion(string $name): void
