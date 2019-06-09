@@ -70,7 +70,7 @@ final class OpenUICommand extends SRegionProtectorCommand
         if ($this->uiType === UIType::CHEST) {
             ChestUIManager::open($target, $region);
         } else {
-            //TODO form ui
+            //form UI
         }
     }
 }

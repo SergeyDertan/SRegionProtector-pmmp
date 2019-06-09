@@ -81,7 +81,7 @@ final class YAMLDataProvider extends DataProvider
 
     public function removeRegion(string $name): void
     {
-        //TODO
+        unlink(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($name) . ".yml");
     }
 
     public function getType(): int
