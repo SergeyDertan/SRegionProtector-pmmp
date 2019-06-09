@@ -33,7 +33,7 @@ final class RegionSellCommand extends SRegionProtectorCommand
             $this->messenger->sendMessage($sender, "command.{$this->msg}.not-creator");
             return;
         }
-        if ($this->regionManager->checkOverlap($region->getMin(), $region->getMax(), $region->getLevel(), "", false, $region)) {
+        if ($this->regionManager->checkOverlap($region->getMin()->add(-1, -1, -1), $region->getMax()->add(1, 1, 1), $region->getLevel(), "", false, $region)) {
             $this->messenger->sendMessage($sender, "command.{$this->msg}.overlap");
             return;
         }

@@ -85,12 +85,13 @@ final class Region
 
     public function __construct(string $name, string $creator, string $level, int $minX, int $minY, int $minZ, int $maxX, int $maxY, int $maxZ, array $owners = [], array $members = [], ?array $flags = null, int $priority = 0)
     {
-        $this->minX = $minX;
-        $this->minY = $minY;
-        $this->minZ = $minZ;
-        $this->maxX = $maxX;
-        $this->maxY = $maxY;
-        $this->maxZ = $maxZ;
+        $this->minX = (float)$minX;
+        $this->minY = (float)$minY;
+        $this->minZ = (float)$minZ;
+
+        $this->maxX = (float)$maxX;
+        $this->maxY = (float)$maxY;
+        $this->maxZ = (float)$maxZ;
 
         $this->name = $name;
         $this->creator = $creator;
@@ -106,7 +107,7 @@ final class Region
 
         $this->priority = $priority;
 
-        $this->size = (int)($this->maxX - $this->minX) * ($this->maxY - $this->minY) * ($this->maxZ - $this->minZ);
+        $this->size = (int)(($this->maxX - $this->minX) * ($this->maxY - $this->minY) * ($this->maxZ - $this->minZ));
     }
 
     public function addChunk(Chunk $chunk): void
@@ -134,17 +135,6 @@ final class Region
         $this->owners = [];
         $this->members = [];
         $this->needUpdate = true;
-    }
-
-    public function isVectorInside(Vector3 $vector): bool
-    {
-        if ($vector->x <= $this->minX || $vector->x >= $this->maxX) {
-            return false;
-        }
-        if ($vector->y <= $this->minY || $vector->y >= $this->maxY) {
-            return false;
-        }
-        return $vector->z > $this->minZ && $vector->z < $this->maxZ;
     }
 
     public function isSelling(): bool
@@ -357,12 +347,23 @@ final class Region
 
     public function intersectsWith(AxisAlignedBB $bb, float $epsilon = 0.00001): bool
     {
-        if ($bb->maxX - $this->minX > $epsilon && $this->maxX - $bb->minX > $epsilon) {
-            if ($bb->maxY - $this->minY > $epsilon && $this->maxY - $bb->minY > $epsilon) {
-                return $bb->maxZ - $this->minZ > $epsilon && $this->maxZ - $bb->minZ > $epsilon;
+        if ($bb->maxX - $this->minX - 1 > $epsilon && $this->maxX + 1 - $bb->minX > $epsilon) {
+            if ($bb->maxY - $this->minY - 1 > $epsilon && $this->maxY + 1 - $bb->minY > $epsilon) {
+                return $bb->maxZ - $this->minZ - 1 > $epsilon && $this->maxZ + 1 - $bb->minZ > $epsilon;
             }
         }
         return false;
+    }
+
+    public function isVectorInside(Vector3 $vector): bool
+    {
+        if ($vector->x <= $this->minX - 1 || $vector->x >= $this->maxX + 1) {
+            return false;
+        }
+        if ($vector->y <= $this->minY - 1 || $vector->y >= $this->maxY + 1) {
+            return false;
+        }
+        return $vector->z > $this->minZ - 1 && $vector->z < $this->maxZ + 1;
     }
 
     public function getHealerBlockEntity(): ?BlockEntityHealer

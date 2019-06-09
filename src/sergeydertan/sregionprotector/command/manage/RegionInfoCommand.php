@@ -40,7 +40,8 @@ final class RegionInfoCommand extends SRegionProtectorCommand
         if (!$this->checkPerm($sender)) return;
         if (empty($args)) {
             if (!$sender instanceof Player) {
-                $this->checkUsage($sender, 1, []);
+                $r = [];
+                $this->checkUsage($sender, 1, $r);
                 return;
             }
             $region = $this->chunkManager->getRegion($sender, $sender->level->getName());

@@ -51,7 +51,8 @@ final class CreateRegionCommand extends SRegionProtectorCommand
         $name = array_shift($args);
         $name = str_replace(" ", "", $name);
         if (strlen($name) === 0) {
-            $this->checkUsage($sender, 1, []);
+            $r = [];
+            $this->checkUsage($sender, 1, $r);
             return;
         }
         if (strlen($name) < $this->regionSettings->getMinRegionNameLength() || strlen($name) > $this->regionSettings->getMaxRegionNameLength() || !preg_match("/[A-Za-z0-9]+/", $name)) {

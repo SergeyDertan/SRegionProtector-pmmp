@@ -13,6 +13,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
 use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\Player;
+use pocketmine\tile\Chest;
 use pocketmine\tile\Tile;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\region\Region;
@@ -59,7 +60,7 @@ abstract class ChestUIManager
         $pk2->z = $pk1->z;
 
         $nbt = new CompoundTag("", [
-            new StringTag(Tile::TAG_ID, "chest"),
+            new StringTag(Tile::TAG_ID, Chest::CHEST),
             new IntTag(Tile::TAG_X, $pk1->x),
             new IntTag(Tile::TAG_Y, $pk1->y),
             new IntTag(Tile::TAG_Z, $pk1->z)

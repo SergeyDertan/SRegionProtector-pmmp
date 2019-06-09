@@ -35,7 +35,6 @@ use pocketmine\level\particle\AngryVillagerParticle;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
-use pocketmine\utils\MainLogger;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\region\chunk\ChunkManager;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
@@ -62,7 +61,7 @@ final class RegionEventsHandler implements Listener
     /**
      * @var bool
      */
-    private $pprioritySystem;
+    private $prioritySystem;
 
     /**
      * @var bool
@@ -79,7 +78,7 @@ final class RegionEventsHandler implements Listener
         $this->chunkManager = $chunkManager;
         $this->flagStatus = $flagStatus;
         $this->needMessage = $needMessage;
-        $this->pprioritySystem = $prioritySystem;
+        $this->prioritySystem = $prioritySystem;
         $this->protectedMessageType = $protectedMessageType;
         $this->showParticle = $showParticle;
     }
@@ -430,7 +429,7 @@ final class RegionEventsHandler implements Listener
         foreach ($chunk->getRegions() as $region) {
             if (!$region->isVectorInside($pos)) continue;
             if (!$region->getFlagState($flag)) {
-                if ($this->pprioritySystem) {
+                if ($this->prioritySystem) {
                     return false;
                 } else {
                     continue;
@@ -453,7 +452,7 @@ final class RegionEventsHandler implements Listener
                 continue;
             }
             if (!$region->getFlagState($flag)) {
-                if ($this->pprioritySystem) {
+                if ($this->prioritySystem) {
                     break;
                 } else {
                     continue;
@@ -461,7 +460,7 @@ final class RegionEventsHandler implements Listener
             }
             if ($this->showParticle && $player !== null) {
                 $pos = $pos->asVector3();
-                if ((float)($pos->x % 1 + $pos->y % 1 + $pos->z % 1) === (float)0) {
+                if (fmod($pos->x, 1) + fmod($pos->y, 1) + fmod($pos->z, 1) === (float)0.0) {
                     $pos = $pos->add(0.5, 1.3, 0.5);
                 }
                 $particle = new AngryVillagerParticle($pos);

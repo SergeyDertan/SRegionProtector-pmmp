@@ -29,7 +29,7 @@ final class SetPriorityCommand extends SRegionProtectorCommand
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
         if (!$this->checkPerm($sender)) return;
-        if (!$this->checkUsage($sender, 3, $args)) return;
+        if (!$this->checkUsage($sender, 2, $args)) return;
         $region = $this->regionManager->getRegion($args[0]);
         if ($region === null) {
             $this->messenger->sendMessage($sender, "command.{$this->msg}.wrong-target");

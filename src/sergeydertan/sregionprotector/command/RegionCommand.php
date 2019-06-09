@@ -35,8 +35,7 @@ final class RegionCommand extends SRegionProtectorCommand
             $this->messenger->sendMessage($sender, "command.{$this->msg}.command-doesnt-exists", ["@name"], [$args[0]]);
             return;
         }
-        array_shift($args);
-        $this->commands[$args[0]]->execute($sender, $args[1], $args);
+        $this->commands[$args[0]]->execute($sender, array_shift($args), $args);
     }
 
     public function registerCommand(Command $command): void

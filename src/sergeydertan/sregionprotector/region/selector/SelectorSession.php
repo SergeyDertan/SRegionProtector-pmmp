@@ -73,7 +73,7 @@ final class SelectorSession
 
         if ($size < 0) return PHP_INT_MAX;
 
-        return $size;
+        return (int)$size;
     }
 
     public function setNextPos(Position $pos): bool

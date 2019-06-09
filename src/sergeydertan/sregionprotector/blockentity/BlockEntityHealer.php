@@ -51,7 +51,7 @@ final class BlockEntityHealer extends Spawnable
     {
         parent::__construct($level, $nbt);
 
-        $this->delay = self::$HEAL_DELAY;
+        $this->delay = static::$HEAL_DELAY;
     }
 
     public static function setRegionManager(RegionManager $regionManager): void
@@ -62,14 +62,14 @@ final class BlockEntityHealer extends Spawnable
     public function onUpdate(): bool
     {
         if ($this->closed) return false;
-        if (!self::$FLAG_ENABLED) return true;
+        if (!static::$FLAG_ENABLED) return true;
         $region = static::$regionManager->getRegion($this->region);
         if ($region === null) return false;
         if (!$region->getFlagState(RegionFlags::FLAG_HEAL)) return true;
         if (--$this->delay > 0) return true;
         foreach ($this->level->getNearbyEntities($this->bb) as $entity) {
             if (!$entity instanceof Player) continue;
-            $entity->heal(new EntityRegainHealthEvent($entity, self::$HEAL_AMOUNT, EntityRegainHealthEvent::CAUSE_CUSTOM));
+            $entity->heal(new EntityRegainHealthEvent($entity, static::$HEAL_AMOUNT, EntityRegainHealthEvent::CAUSE_CUSTOM));
         }
         $this->delay = self::$HEAL_DELAY;
         return true;
@@ -108,6 +108,9 @@ final class BlockEntityHealer extends Spawnable
     protected function readSaveData(CompoundTag $nbt): void
     {
         $this->region = $nbt->getString(Tags::REGION_TAG);
-        $this->bb = static::$regionManager->getRegion($this->region)->getBoundingBox();
+
+        $region = static::$regionManager->getRegion($this->region);
+        if ($region === null) return;
+        $this->bb = $region->getBoundingBox();
     }
 }

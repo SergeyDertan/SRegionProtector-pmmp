@@ -14,10 +14,13 @@ abstract class Tags
     const X_TAG = "x";
     const Y_TAG = "y";
     const Z_TAG = "z";
+    const YAW_TAG = "yaw";
+    const PITCH_TAG = "pitch";
     const OWNERS_TAG = "owners";
     const MEMBERS_TAG = "members";
     const NAME_TAG = "name";
     const LEVEL_TAG = "level";
+    const FLAGS_TAG = "flags";
     const CREATOR_TAG = "creator";
     const STATE_TAG = "state";
     const PRICE_TAG = "price";

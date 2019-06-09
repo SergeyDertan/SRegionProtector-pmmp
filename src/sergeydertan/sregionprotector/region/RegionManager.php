@@ -8,6 +8,7 @@ use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
+use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\main\SaveType;
@@ -18,6 +19,7 @@ use sergeydertan\sregionprotector\region\flags\flag\RegionFlag;
 use sergeydertan\sregionprotector\region\flags\flag\RegionSellFlag;
 use sergeydertan\sregionprotector\region\flags\flag\RegionTeleportFlag;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
+use sergeydertan\sregionprotector\util\Tags;
 
 final class RegionManager
 {
@@ -124,38 +126,38 @@ final class RegionManager
     public function init(bool $saveNewFlags): void
     {
         foreach ($this->provider->loadRegionList() as $region) {
-            $name = (string)$region["name"];
+            $name = (string)$region[Tags::NAME_TAG];
 
-            $minX = (int)$region["min-x"];
-            $minY = (int)$region["min-y"];
-            $minZ = (int)$region["min-z"];
+            $minX = (int)$region[Tags::MIN_X_TAG];
+            $minY = (int)$region[Tags::MIN_Y_TAG];
+            $minZ = (int)$region[Tags::MIN_Z_TAG];
 
-            $maxX = (int)$region["max-x"];
-            $maxY = (int)$region["max-y"];
-            $maxZ = (int)$region["max-z"];
+            $maxX = (int)$region[Tags::MAX_X_TAG];
+            $maxY = (int)$region[Tags::MAX_Y_TAG];
+            $maxZ = (int)$region[Tags::MAX_Z_TAG];
 
-            $owners = (array)$region["owners"];
-            $members = (array)$region["members"];
+            $owners = (array)$region[Tags::OWNERS_TAG];
+            $members = (array)$region[Tags::MEMBERS_TAG];
 
-            $creator = (string)$region["creator"];
+            $creator = (string)$region[Tags::CREATOR_TAG];
 
-            $level = (string)$region["level"];
-            $priority = (int)$region["priority"];
+            $level = (string)$region[Tags::LEVEL_TAG];
+            $priority = (int)$region[Tags::PRIORITY_TAG];
 
             $flags = [];
 
-            foreach ($region["flags"] as $flagName => $flagData) {
+            foreach ($region[Tags::FLAGS_TAG] as $flagName => $flagData) {
                 $id = RegionFlags::getFlagId($flagName);
-                $state = (bool)$flagData["state"];
+                $state = (bool)$flagData[Tags::STATE_TAG];
                 if ($id === RegionFlags::FLAG_SELL) {
-                    $flag = new RegionSellFlag($state, (int)$flagData["price"]);
+                    $flag = new RegionSellFlag($state, (int)$flagData[Tags::PRICE_TAG]);
                 } else if ($id === RegionFlags::FLAG_TELEPORT) {
-                    $tpLevel = $flagData["level"];
-                    $x = isset($flagData["x"]) ? (float)$flagData["x"] : 0;
-                    $y = isset($flagData["y"]) ? (float)$flagData["y"] : 0;
-                    $z = isset($flagData["z"]) ? (float)$flagData["z"] : 0;
-                    $yaw = isset($flagData["yaw"]) ? (float)$flagData["yaw"] : 0;
-                    $pitch = isset($flagData["pitch"]) ? (float)$flagData["pitch"] : 0;
+                    $tpLevel = $flagData[Tags::LEVEL_TAG];
+                    $x = isset($flagData[Tags::X_TAG]) ? (float)$flagData[Tags::X_TAG] : 0;
+                    $y = isset($flagData[Tags::Y_TAG]) ? (float)$flagData[Tags::Y_TAG] : 0;
+                    $z = isset($flagData[Tags::Z_TAG]) ? (float)$flagData[Tags::Z_TAG] : 0;
+                    $yaw = isset($flagData[Tags::YAW_TAG]) ? (float)$flagData[Tags::YAW_TAG] : 0;
+                    $pitch = isset($flagData[Tags::PITCH_TAG]) ? (float)$flagData[Tags::PITCH_TAG] : 0;
                     $flag = new RegionTeleportFlag($state, new Location($x, $y, $z, $yaw, $pitch), $tpLevel);
                 } else {
                     $flag = new RegionFlag($state);

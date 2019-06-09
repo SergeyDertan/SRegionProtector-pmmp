@@ -55,11 +55,6 @@ final class RegionSelector
         }
     }
 
-    public function checkSessionExpiration(SelectorSession $session): bool
-    {
-        return Utils::currentTimeMillis() < $session->expirationTime;
-    }
-
     public function sessionExists(Player $player): bool
     {
         return isset($this->sessions[$player->getLoaderId()]);
@@ -78,7 +73,7 @@ final class RegionSelector
                 abs(max($pos1->z, $pos2->z) - min($pos1->z, $pos2->z))
             );
         if ($size < 0) return PHP_INT_MAX;
-        return $size - 4;
+        return (int)$size - 4;
     }
 
     public function showBorders(Player $target, Vector3 $pos1, Vector3 $pos2): void

@@ -137,6 +137,14 @@ final class SRegionProtectorMain extends PluginBase
         $this->checkUpdate();
     }
 
+    public function onDisable(): void
+    {
+        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.start", ["@ver"], [$this->getDescription()->getVersion()]));
+
+        $this->save(SaveType::DISABLING);
+        $this->dataProvider->close();
+    }
+
     private function checkUpdate(): void
     {
         try {

@@ -10,6 +10,7 @@ use sergeydertan\sregionprotector\region\flags\flag\RegionSellFlag;
 use sergeydertan\sregionprotector\region\flags\flag\RegionTeleportFlag;
 use sergeydertan\sregionprotector\region\flags\RegionFlags;
 use sergeydertan\sregionprotector\region\Region;
+use sergeydertan\sregionprotector\util\Tags;
 use sergeydertan\sregionprotector\util\Utils;
 
 final class YAMLDataProvider extends DataProvider
@@ -19,47 +20,47 @@ final class YAMLDataProvider extends DataProvider
     {
         $data = [];
 
-        $data["name"] = $region->getName();
+        $data[Tags::NAME_TAG] = $region->getName();
 
-        $data["min-x"] = $region->getMinX();
-        $data["min-y"] = $region->getMinY();
-        $data["min-z"] = $region->getMinZ();
+        $data[Tags::MIN_X_TAG] = $region->getMinX();
+        $data[Tags::MIN_Y_TAG] = $region->getMinY();
+        $data[Tags::MIN_Z_TAG] = $region->getMinZ();
 
-        $data["max-x"] = $region->getMaxX();
-        $data["max-y"] = $region->getMaxY();
-        $data["max-z"] = $region->getMaxZ();
+        $data[Tags::MAX_X_TAG] = $region->getMaxX();
+        $data[Tags::MAX_Y_TAG] = $region->getMaxY();
+        $data[Tags::MAX_Z_TAG] = $region->getMaxZ();
 
-        $data["owners"] = $region->getOwners();
-        $data["members"] = $region->getMembers();
+        $data[Tags::OWNERS_TAG] = $region->getOwners();
+        $data[Tags::MEMBERS_TAG] = $region->getMembers();
 
-        $data["creator"] = $region->getCreator();
+        $data[Tags::CREATOR_TAG] = $region->getCreator();
 
-        $data["level"] = $region->getLevel();
+        $data[Tags::LEVEL_TAG] = $region->getLevel();
 
-        $data["priority"] = $region->getPriority();
+        $data[Tags::PRIORITY_TAG] = $region->getPriority();
 
         $flags = [];
         foreach ($region->getFlags() as $id => $flag) {
             $flagData = [];
-            $flagData["state"] = $flag->state;
+            $flagData[Tags::STATE_TAG] = $flag->state;
             if ($flag instanceof RegionSellFlag) {
-                $flagData["price"] = $flag->price;
+                $flagData[Tags::PRICE_TAG] = $flag->price;
             } elseif ($flag instanceof RegionTeleportFlag) {
                 if ($flag->position !== null) {
-                    $flagData["x"] = $flag->position->x;
-                    $flagData["y"] = $flag->position->y;
-                    $flagData["z"] = $flag->position->z;
+                    $flagData[Tags::X_TAG] = $flag->position->x;
+                    $flagData[Tags::Y_TAG] = $flag->position->y;
+                    $flagData[Tags::Z_TAG] = $flag->position->z;
 
                     if ($flag->position instanceof Location) {
-                        $flagData["yaw"] = $flag->position->yaw;
-                        $flagData["pitch"] = $flag->position->pitch;
+                        $flagData[Tags::YAW_TAG] = $flag->position->yaw;
+                        $flagData[Tags::PITCH_TAG] = $flag->position->pitch;
                     }
                 }
-                $flagData["level"] = $flag->level;
+                $flagData[Tags::LEVEL_TAG] = $flag->level;
             }
             $flags[RegionFlags::getFlagName($id)] = $flagData;
         }
-        $data["flags"] = $flags;
+        $data[Tags::FLAGS_TAG] = $flags;
         $file = new Config(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($region->getName()) . ".yml", Config::YAML);
         $file->setAll($data);
         $file->save();
@@ -88,7 +89,7 @@ final class YAMLDataProvider extends DataProvider
 
     public function removeRegion(string $name): void
     {
-        unlink(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($name) . ".yml");
+        @unlink(SRegionProtectorMain::getInstance()->getRegionsFolder() . strtolower($name) . ".yml");
     }
 
     public function getType(): int
