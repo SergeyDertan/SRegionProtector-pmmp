@@ -5,6 +5,7 @@ namespace sergeydertan\sregionprotector\region;
 
 use Logger;
 use pocketmine\level\Level;
+use pocketmine\level\Location;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
 use pocketmine\utils\TextFormat;
@@ -150,10 +151,12 @@ final class RegionManager
                     $flag = new RegionSellFlag($state, (int)$flagData["price"]);
                 } else if ($id === RegionFlags::FLAG_TELEPORT) {
                     $tpLevel = $flagData["level"];
-                    $x = isset($flagData["x"]) ? (int)$flagData["x"] : 0;
-                    $y = isset($flagData["y"]) ? (int)$flagData["y"] : 0;
-                    $z = isset($flagData["z"]) ? (int)$flagData["z"] : 0;
-                    $flag = new RegionTeleportFlag($state, new Vector3($x, $y, $z), $tpLevel);
+                    $x = isset($flagData["x"]) ? (float)$flagData["x"] : 0;
+                    $y = isset($flagData["y"]) ? (float)$flagData["y"] : 0;
+                    $z = isset($flagData["z"]) ? (float)$flagData["z"] : 0;
+                    $yaw = isset($flagData["yaw"]) ? (float)$flagData["yaw"] : 0;
+                    $pitch = isset($flagData["pitch"]) ? (float)$flagData["pitch"] : 0;
+                    $flag = new RegionTeleportFlag($state, new Location($x, $y, $z, $yaw, $pitch), $tpLevel);
                 } else {
                     $flag = new RegionFlag($state);
                 }
@@ -205,9 +208,8 @@ final class RegionManager
 
     public function getRegion(string $name): ?Region
     {
-        return
-            isset($this->regions[strtolower($name)]) ?
-                $this->regions[strtolower($name)] : null;
+        return isset($this->regions[strtolower($name)]) ?
+            $this->regions[strtolower($name)] : null;
     }
 
     public function changeRegionOwner(Region $region, string $newOwner): void

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\region\flags\flag;
 
+use pocketmine\level\Location;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\Server;
@@ -10,7 +11,7 @@ use pocketmine\Server;
 final class RegionTeleportFlag extends RegionFlag
 {
     /**
-     * @var Vector3
+     * @var Vector3|Location
      */
     public $position;
 
@@ -30,13 +31,13 @@ final class RegionTeleportFlag extends RegionFlag
     {
         $level = Server::getInstance()->getLevelByName($this->level);
         if ($level === null) return null;
-        return Position::fromObject($this->position, $level);
+        return clone $this->position;
     }
 
     public function setPosition(?Position $position): void
     {
         if ($position === null) return;
-        $this->position = $position->asVector3();
+        $this->position = clone $position;
         $this->level = $position->level->getName();
     }
 }

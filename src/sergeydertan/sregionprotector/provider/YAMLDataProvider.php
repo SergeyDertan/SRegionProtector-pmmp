@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\provider;
 
+use pocketmine\level\Location;
 use pocketmine\utils\Config;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\flags\flag\RegionSellFlag;
@@ -44,10 +45,15 @@ final class YAMLDataProvider extends DataProvider
             if ($flag instanceof RegionSellFlag) {
                 $flagData["price"] = $flag->price;
             } elseif ($flag instanceof RegionTeleportFlag) {
-                if ($flag->position != null) {
+                if ($flag->position !== null) {
                     $flagData["x"] = $flag->position->x;
                     $flagData["y"] = $flag->position->y;
                     $flagData["z"] = $flag->position->z;
+
+                    if ($flag->position instanceof Location) {
+                        $flagData["yaw"] = $flag->position->yaw;
+                        $flagData["pitch"] = $flag->position->pitch;
+                    }
                 }
                 $flagData["level"] = $flag->level;
             }

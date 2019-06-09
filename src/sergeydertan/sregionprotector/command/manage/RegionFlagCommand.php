@@ -67,7 +67,7 @@ final class RegionFlagCommand extends SRegionProtectorCommand
                     $this->messenger->sendMessage($sender, "command.{$this->msg}.teleport-should-be-in-region");
                     return;
                 }
-                $region->setTeleportFlag($sender->getPosition(), true);
+                $region->setTeleportFlag($sender->getLocation(), true);
             } else {
                 $region->setTeleportFlag(null, false);
             }
