@@ -461,13 +461,11 @@ final class RegionEventsHandler implements Listener
             }
             if ($this->showParticle && $player !== null) {
                 $pos = $pos->asVector3();
-                if ($pos->x % 1 + $pos->y % 1 + $pos->z % 1 === 0) {
-                    $pos->add(0.5, 1.3, 0.5);
+                if ((float)($pos->x % 1 + $pos->y % 1 + $pos->z % 1) === (float)0) {
+                    $pos = $pos->add(0.5, 1.3, 0.5);
                 }
                 $particle = new AngryVillagerParticle($pos);
-                foreach ($particle->encode() as $pk) {
-                    $player->dataPacket($pk);
-                }
+                $player->dataPacket($particle->encode());
             }
             $event->setCancelled();
             if ($player !== null && $this->needMessage[$flag]) {
