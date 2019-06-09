@@ -137,28 +137,11 @@ final class SRegionProtectorMain extends PluginBase
         $this->checkUpdate();
     }
 
-    /**
-     * $ch = curl_init();
-     *
-     * //Set the URL that you want to GET by using the CURLOPT_URL option.
-     * curl_setopt($ch, CURLOPT_URL, 'http://google.com');
-     *
-     * //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
-     * curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-     *
-     * //Set CURLOPT_FOLLOWLOCATION to true to follow redirects.
-     * curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-     *
-     * //Execute the request.
-     * $data = curl_exec($ch);
-     *
-     * //Close the cURL handle.
-     * curl_close($ch);
-     */
     private function checkUpdate(): void
     {
         try {
             $data = Utils::httpRequest(static::VERSION_URL);
+            $data = json_decode($data, true);
 
             $ver = (string)$data["tag_name"];
             $description = (string)$data["name"];
