@@ -26,7 +26,6 @@ abstract class Utils
         }
         if (!$fixMissing) return;
 
-
         $src = yaml_parse(stream_get_contents(self::getResource($file)));
 
         $trg = new Config($target, Config::YAML);

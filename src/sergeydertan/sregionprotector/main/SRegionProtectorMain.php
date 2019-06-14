@@ -97,6 +97,14 @@ final class SRegionProtectorMain extends PluginBase
      */
     private $mainCommand;
 
+    /**
+     * @return SRegionProtectorMain
+     */
+    public static function getInstance(): ?SRegionProtectorMain
+    {
+        return self::$INSTANCE;
+    }
+
     public function onEnable(): void
     {
         self::$INSTANCE = $this;
@@ -320,24 +328,11 @@ final class SRegionProtectorMain extends PluginBase
         $this->regionManager->save($type, $initiator);
     }
 
-    /**
-     * @return SRegionProtectorMain
-     */
-    public static function getInstance(): ?SRegionProtectorMain
-    {
-        return self::$INSTANCE;
-    }
-
     private function initSessionsClearTask(): void
     {
         $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function (): void {
             $this->regionSelector->clear();
         }), $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
-    }
-
-    public function getRegionSelector(): RegionSelector
-    {
-        return $this->regionSelector;
     }
 
     private function initUI(): void
@@ -364,6 +359,11 @@ final class SRegionProtectorMain extends PluginBase
             }
         } catch (Exception $ignore) {
         }
+    }
+
+    public function getRegionSelector(): RegionSelector
+    {
+        return $this->regionSelector;
     }
 
     public function onDisable(): void
