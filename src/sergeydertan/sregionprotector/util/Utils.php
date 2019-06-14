@@ -22,7 +22,6 @@ abstract class Utils
         if (!file_exists($target)) {
             stream_copy_to_stream(self::getResource($file), $t = fopen($target, "wb"));
             fclose($t);
-            //copy(self::getResource($file), $target);
             return;
         }
         if (!$fixMissing) return;
@@ -30,7 +29,6 @@ abstract class Utils
 
         $src = yaml_parse(stream_get_contents(self::getResource($file)));
 
-        //$src = (new Config(self::getResource($file), Config::YAML))->getAll();
         $trg = new Config($target, Config::YAML);
 
         $tt = $trg->getAll();
@@ -44,25 +42,6 @@ abstract class Utils
     public static function getResource(string $file)
     {
         return SRegionProtectorMain::getInstance()->getResource($file);
-        /*$file = rtrim(str_replace("\\", "/", $file), "/");
-
-        $dir = sys_get_temp_dir() . "/srp/";
-        $dir = str_replace("\\", "/", $dir);
-        @mkdir($dir, 0777, true);
-
-        $fileDir = explode("/", $file);
-        array_pop($fileDir);
-        @mkdir($dir . implode("/", $fileDir));
-
-        @unlink($dir . $file);
-        if (SRegionProtectorMain::getInstance()->isPhar()) {
-
-            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
-            return $dir . '/resources/' . $file;
-        } else {
-            copy(SRegionProtectorMain::getInstance()->getFile() . "resources/$file", $dir . $file);
-            return $dir . $file;
-        }*/
     }
 
     /**
@@ -154,13 +133,6 @@ abstract class Utils
     public static function resourceExists(string $file): bool
     {
         return SRegionProtectorMain::getInstance()->getResource($file) !== null;
-        /*if (SRegionProtectorMain::getInstance()->isPhar()) {
-            @mkdir($dir = sys_get_temp_dir() . "/srp/", 0777, true);
-            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
-            return file_exists($dir . 'resources/' . $file);
-        } else {
-            return file_exists(SRegionProtectorMain::getInstance()->getFile() . "/resources/$file");
-        }*/
     }
 
     /**
