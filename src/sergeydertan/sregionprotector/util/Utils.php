@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace sergeydertan\sregionprotector\util;
 
 use Exception;
-use Phar;
 use pocketmine\utils\Config;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -19,15 +18,19 @@ abstract class Utils
 
     public static function copyResource(string $file, bool $fixMissing = true, bool $removeAbsent = true): void
     {
-        $file=self::f($file);
-        $target = self::f(SRegionProtectorMain::getInstance()->getMainFolder() . $file);
+        $target = SRegionProtectorMain::getInstance()->getMainFolder() . $file;
         if (!file_exists($target)) {
-            copy(self::getResource(self::f($file)), $target);
+            stream_copy_to_stream(self::getResource($file), $t = fopen($target, "wb"));
+            fclose($t);
+            //copy(self::getResource($file), $target);
             return;
         }
         if (!$fixMissing) return;
 
-        $src = (new Config(self::getResource($file), Config::YAML))->getAll();
+
+        $src = yaml_parse(stream_get_contents(self::getResource($file)));
+
+        //$src = (new Config(self::getResource($file), Config::YAML))->getAll();
         $trg = new Config($target, Config::YAML);
 
         $tt = $trg->getAll();
@@ -38,29 +41,28 @@ abstract class Utils
         }
     }
 
-    public static function getResource(string $file): string
+    public static function getResource(string $file)
     {
-        @mkdir($dir = self::f(sys_get_temp_dir() . "/srp/"), 0777, true);
+        return SRegionProtectorMain::getInstance()->getResource($file);
+        /*$file = rtrim(str_replace("\\", "/", $file), "/");
+
+        $dir = sys_get_temp_dir() . "/srp/";
+        $dir = str_replace("\\", "/", $dir);
+        @mkdir($dir, 0777, true);
 
         $fileDir = explode("/", $file);
         array_pop($fileDir);
-        @mkdir(self::f($dir . implode("/", $fileDir)));
+        @mkdir($dir . implode("/", $fileDir));
 
-        @unlink(self::f($dir . $file));
+        @unlink($dir . $file);
         if (SRegionProtectorMain::getInstance()->isPhar()) {
-            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo(self::f($dir), [self::f("resources/$file")], true);
-            return self::f($dir . '/resources/' . $file);
-        } else {
-            copy(self::f(SRegionProtectorMain::getInstance()->getFile() . "resources/$file"), self::f($dir . $file));
-            return self::f($dir . $file);
-        }
-    }
 
-    private static function f(string $f): string
-    {
-        $f = str_replace("//", "/", $f);
-        $f = str_replace("\\\\", "\\", $f);
-        return $f;
+            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
+            return $dir . '/resources/' . $file;
+        } else {
+            copy(SRegionProtectorMain::getInstance()->getFile() . "resources/$file", $dir . $file);
+            return $dir . $file;
+        }*/
     }
 
     /**
@@ -151,13 +153,14 @@ abstract class Utils
 
     public static function resourceExists(string $file): bool
     {
-        if (SRegionProtectorMain::getInstance()->isPhar()) {
+        return SRegionProtectorMain::getInstance()->getResource($file) !== null;
+        /*if (SRegionProtectorMain::getInstance()->isPhar()) {
             @mkdir($dir = sys_get_temp_dir() . "/srp/", 0777, true);
             (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
             return file_exists($dir . 'resources/' . $file);
         } else {
             return file_exists(SRegionProtectorMain::getInstance()->getFile() . "/resources/$file");
-        }
+        }*/
     }
 
     /**
