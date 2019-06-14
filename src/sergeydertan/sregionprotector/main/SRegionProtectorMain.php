@@ -6,7 +6,6 @@ namespace sergeydertan\sregionprotector\main;
 use Exception;
 use pocketmine\command\Command;
 use pocketmine\plugin\PluginBase;
-use pocketmine\scheduler\Task;
 use pocketmine\Server;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
@@ -55,6 +54,7 @@ use sergeydertan\sregionprotector\region\selector\RegionSelector;
 use sergeydertan\sregionprotector\settings\Settings;
 use sergeydertan\sregionprotector\ui\chest\page\Page;
 use sergeydertan\sregionprotector\ui\form\FormUIManager;
+use sergeydertan\sregionprotector\util\Task;
 use sergeydertan\sregionprotector\util\Utils;
 
 final class SRegionProtectorMain extends PluginBase
@@ -298,13 +298,10 @@ final class SRegionProtectorMain extends PluginBase
     private function initAutoSave(): void
     {
         if (!$this->settings->isAutoSave()) return;
-        $this->getScheduler()->scheduleDelayedRepeatingTask(new class extends Task
-        {
-            public function onRun(int $tick): void
-            {
-                SRegionProtectorMain::getInstance()->save(SaveType::AUTO);
-            }
-        }, $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
+        $self = $this;
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function () use ($self): void {
+            $self->save(SaveType::AUTO);
+        }), $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
     }
 
     public function save(int $type, string $initiator = null): void
@@ -334,13 +331,10 @@ final class SRegionProtectorMain extends PluginBase
 
     private function initSessionsClearTask(): void
     {
-        $this->getScheduler()->scheduleDelayedRepeatingTask(new class extends Task
-        {
-            public function onRun(int $tick): void
-            {
-                SRegionProtectorMain::getInstance()->getRegionSelector()->clear();
-            }
-        }, $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
+        $self = $this;
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function () use ($self): void {
+            $self->regionSelector->clear();
+        }), $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
     }
 
     public function getRegionSelector(): RegionSelector
