@@ -19,9 +19,10 @@ abstract class Utils
 
     public static function copyResource(string $file, bool $fixMissing = true, bool $removeAbsent = true): void
     {
-        $target = SRegionProtectorMain::getInstance()->getMainFolder() . $file;
+        $file=self::f($file);
+        $target = self::f(SRegionProtectorMain::getInstance()->getMainFolder() . $file);
         if (!file_exists($target)) {
-            copy(self::getResource($file), $target);
+            copy(self::getResource(self::f($file)), $target);
             return;
         }
         if (!$fixMissing) return;
@@ -39,20 +40,27 @@ abstract class Utils
 
     public static function getResource(string $file): string
     {
-        @mkdir($dir = sys_get_temp_dir() . "/srp/", 0777, true);
+        @mkdir($dir = self::f(sys_get_temp_dir() . "/srp/"), 0777, true);
 
         $fileDir = explode("/", $file);
         array_pop($fileDir);
-        @mkdir($dir . implode("/", $fileDir));
+        @mkdir(self::f($dir . implode("/", $fileDir)));
 
-        @unlink($dir . $file);
+        @unlink(self::f($dir . $file));
         if (SRegionProtectorMain::getInstance()->isPhar()) {
-            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo($dir, ["resources/$file"], true);
-            return $dir . '/resources/' . $file;
+            (new Phar(SRegionProtectorMain::getInstance()->getFile()))->extractTo(self::f($dir), [self::f("resources/$file")], true);
+            return self::f($dir . '/resources/' . $file);
         } else {
-            copy(SRegionProtectorMain::getInstance()->getFile() . "resources/$file", $dir . $file);
-            return $dir . $file;
+            copy(self::f(SRegionProtectorMain::getInstance()->getFile() . "resources/$file"), self::f($dir . $file));
+            return self::f($dir . $file);
         }
+    }
+
+    private static function f(string $f): string
+    {
+        $f = str_replace("//", "/", $f);
+        $f = str_replace("\\\\", "\\", $f);
+        return $f;
     }
 
     /**
