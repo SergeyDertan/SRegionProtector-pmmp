@@ -242,7 +242,7 @@ final class Region
 
     public function isMember(string $player): bool
     {
-        return in_array(strtolower($player), $this->owners);
+        return in_array(strtolower($player), $this->members);
     }
 
     public function isCreator(string $player): bool
