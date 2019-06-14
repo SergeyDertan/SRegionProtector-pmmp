@@ -298,9 +298,8 @@ final class SRegionProtectorMain extends PluginBase
     private function initAutoSave(): void
     {
         if (!$this->settings->isAutoSave()) return;
-        $self = $this;
-        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function () use ($self): void {
-            $self->save(SaveType::AUTO);
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function (): void {
+            $this->save(SaveType::AUTO);
         }), $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
     }
 
@@ -331,9 +330,8 @@ final class SRegionProtectorMain extends PluginBase
 
     private function initSessionsClearTask(): void
     {
-        $self = $this;
-        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function () use ($self): void {
-            $self->regionSelector->clear();
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new Task(function (): void {
+            $this->regionSelector->clear();
         }), $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
     }
 

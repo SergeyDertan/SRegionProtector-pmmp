@@ -5,9 +5,9 @@ namespace sergeydertan\sregionprotector\region\chunk;
 
 use Logger;
 use pocketmine\math\Vector3;
-use pocketmine\scheduler\Task;
 use pocketmine\scheduler\TaskScheduler;
 use sergeydertan\sregionprotector\region\Region;
+use sergeydertan\sregionprotector\util\Task;
 
 final class ChunkManager
 {
@@ -29,7 +29,7 @@ final class ChunkManager
     public function init(bool $emptyChunksAutoRemoving, int $removePeriod, TaskScheduler $scheduler)
     {
         if (!$emptyChunksAutoRemoving) return;
-        $scheduler->scheduleDelayedRepeatingTask(new class($this) extends Task
+        /*$scheduler->scheduleDelayedRepeatingTask(new class($this) extends Task
         {
             private $chunkManager;
 
@@ -42,7 +42,10 @@ final class ChunkManager
             {
                 $this->chunkManager->removeEmptyChunks();
             }
-        }, $removePeriod * 20, $removePeriod * 20);
+        }, $removePeriod * 20, $removePeriod * 20);*/
+        $scheduler->scheduleDelayedRepeatingTask(new Task(function (): void {
+            $this->removeEmptyChunks();
+        }), $removePeriod * 20, $removePeriod * 20);
     }
 
     public function removeEmptyChunks(): void
