@@ -40,6 +40,8 @@ abstract class Page
         self::$ownersPage = new OwnersPage();
         self::$removeRegionPage = new RemoveRegionPage();
 
+        FlagsPage::initIcons();
+
         self::$pages = [];
 
         self::$pages[self::$mainPage->getName()] = self::$mainPage;

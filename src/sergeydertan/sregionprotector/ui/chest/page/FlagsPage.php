@@ -22,11 +22,10 @@ class FlagsPage extends Page
      */
     private static $flagToBlock = [];
 
-    public function __construct()
+    public static function initIcons(): void
     {
-        for ($i = 0; $i < RegionFlags::FLAG_AMOUNT; ++$i) {
-            self::$flagToBlock[$i] = ItemIds::BANNER;
-        }
+        self::$flagToBlock = array_fill(0, RegionFlags::FLAG_AMOUNT, ItemIds::BANNER);
+
         self::$flagToBlock[RegionFlags::FLAG_PLACE] = BlockIds::GRASS;
         self::$flagToBlock[RegionFlags::FLAG_BREAK] = BlockIds::GRASS;
         self::$flagToBlock[RegionFlags::FLAG_USE] = BlockIds::LEVER;

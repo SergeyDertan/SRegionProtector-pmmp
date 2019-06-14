@@ -10,6 +10,7 @@ use sergeydertan\sregionprotector\region\chunk\ChunkManager;
 use sergeydertan\sregionprotector\region\Region;
 use sergeydertan\sregionprotector\region\RegionManager;
 use sergeydertan\sregionprotector\ui\chest\ChestUIManager;
+use sergeydertan\sregionprotector\ui\form\FormUIManager;
 use sergeydertan\sregionprotector\ui\UIType;
 
 final class OpenUICommand extends SRegionProtectorCommand
@@ -70,7 +71,7 @@ final class OpenUICommand extends SRegionProtectorCommand
         if ($this->uiType === UIType::CHEST) {
             ChestUIManager::open($target, $region);
         } else {
-            //form UI
+            FormUIManager::open($target, $region);
         }
     }
 }

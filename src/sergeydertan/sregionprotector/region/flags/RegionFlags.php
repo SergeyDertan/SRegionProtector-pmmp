@@ -51,6 +51,7 @@ abstract class RegionFlags
     const FLAG_FRAME_ITEM_DROP = 35;
     const FLAG_BUCKET_EMPTY = 36;
     const FLAG_BUCKET_FILL = 37;
+
     const FLAG_AMOUNT = 38;
     /**
      * @var RegionFlag[]

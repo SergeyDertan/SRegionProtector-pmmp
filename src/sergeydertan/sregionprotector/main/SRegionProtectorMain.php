@@ -54,6 +54,7 @@ use sergeydertan\sregionprotector\region\RegionManager;
 use sergeydertan\sregionprotector\region\selector\RegionSelector;
 use sergeydertan\sregionprotector\settings\Settings;
 use sergeydertan\sregionprotector\ui\chest\page\Page;
+use sergeydertan\sregionprotector\ui\form\FormUIManager;
 use sergeydertan\sregionprotector\util\Utils;
 
 final class SRegionProtectorMain extends PluginBase
@@ -95,14 +96,6 @@ final class SRegionProtectorMain extends PluginBase
      * @var RegionCommand
      */
     private $mainCommand;
-
-    /**
-     * @return SRegionProtectorMain
-     */
-    public static function getInstance(): ?SRegionProtectorMain
-    {
-        return self::$INSTANCE;
-    }
 
     public function onEnable(): void
     {
@@ -219,7 +212,9 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->getServer()->getPluginManager()->registerEvents(new SelectorEventsHandler($this->regionSelector), $this);
 
-        $this->getServer()->getPluginManager()->registerEvents(new UIEventsHandler($this->settings->getUiType()), $this);
+        $this->getServer()->getPluginManager()->registerEvents($ui = new UIEventsHandler($this->settings->getUiType()), $this);
+
+        FormUIManager::init($this->settings->getRegionSettings(), $this->regionManager, $ui);
     }
 
     private function initCommands(): void
@@ -312,6 +307,31 @@ final class SRegionProtectorMain extends PluginBase
         }, $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
     }
 
+    public function save(int $type, string $initiator = null): void
+    {
+        switch ($type) {
+            default:
+            case SaveType::AUTO:
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("auto-save-start"));
+                break;
+            case SaveType::MANUAL:
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start"));
+                break;
+            case SaveType::DISABLING:
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling-save-start"));
+                break;
+        }
+        $this->regionManager->save($type, $initiator);
+    }
+
+    /**
+     * @return SRegionProtectorMain
+     */
+    public static function getInstance(): ?SRegionProtectorMain
+    {
+        return self::$INSTANCE;
+    }
+
     private function initSessionsClearTask(): void
     {
         $this->getScheduler()->scheduleDelayedRepeatingTask(new class extends Task
@@ -321,6 +341,11 @@ final class SRegionProtectorMain extends PluginBase
                 SRegionProtectorMain::getInstance()->getRegionSelector()->clear();
             }
         }, $this->settings->getSelectorSessionClearInterval(), $this->settings->getSelectorSessionClearInterval());
+    }
+
+    public function getRegionSelector(): RegionSelector
+    {
+        return $this->regionSelector;
     }
 
     private function initUI(): void
@@ -355,28 +380,6 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->save(SaveType::DISABLING);
         $this->dataProvider->close();
-    }
-
-    public function save(int $type, string $initiator = null): void
-    {
-        switch ($type) {
-            default:
-            case SaveType::AUTO:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("auto-save-start"));
-                break;
-            case SaveType::MANUAL:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start"));
-                break;
-            case SaveType::DISABLING:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling-save-start"));
-                break;
-        }
-        $this->regionManager->save($type, $initiator);
-    }
-
-    public function getRegionSelector(): RegionSelector
-    {
-        return $this->regionSelector;
     }
 
     public function getRegionsFolder(): string
