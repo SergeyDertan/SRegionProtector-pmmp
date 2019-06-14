@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\ui\chest\page\flags;
 
+use ArrayAccess;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\region\Region;
 
-class FlagList implements \ArrayAccess
+class FlagList implements ArrayAccess
 {
     /**
      * @var boolean[]

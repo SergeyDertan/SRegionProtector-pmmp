@@ -190,7 +190,7 @@ final class RegionSettings
         return $this->healFlagHealDelay;
     }
 
-    public function getHealFlagHealAmount(): int
+    public function getHealFlagHealAmount(): float
     {
         return $this->healFlagHealAmount;
     }

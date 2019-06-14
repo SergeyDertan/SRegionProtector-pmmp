@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace sergeydertan\sregionprotector\ui\form;
+namespace sergeydertan\sregionprotector\ui\form\type;
 
 use pocketmine\Player;
 use sergeydertan\sregionprotector\region\Region;
-use sergeydertan\sregionprotector\ui\form\type\UIForm;
+use sergeydertan\sregionprotector\ui\form\FormUIManager;
 use sergeydertan\sregionprotector\util\form\element\ElementInput;
 use sergeydertan\sregionprotector\util\form\element\ElementLabel;
 use sergeydertan\sregionprotector\util\form\FormWindowCustom;

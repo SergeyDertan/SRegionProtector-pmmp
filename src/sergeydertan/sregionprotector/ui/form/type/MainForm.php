@@ -6,7 +6,6 @@ namespace sergeydertan\sregionprotector\ui\form\type;
 use pocketmine\Player;
 use sergeydertan\sregionprotector\region\Region;
 use sergeydertan\sregionprotector\ui\form\element\Button;
-use sergeydertan\sregionprotector\ui\form\SetPriorityForm;
 use sergeydertan\sregionprotector\util\form\element\ElementButtonImageData;
 use sergeydertan\sregionprotector\util\form\FormWindowSimple;
 
