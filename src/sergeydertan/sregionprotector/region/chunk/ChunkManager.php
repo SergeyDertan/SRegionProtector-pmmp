@@ -29,20 +29,6 @@ final class ChunkManager
     public function init(bool $emptyChunksAutoRemoving, int $removePeriod, TaskScheduler $scheduler)
     {
         if (!$emptyChunksAutoRemoving) return;
-        /*$scheduler->scheduleDelayedRepeatingTask(new class($this) extends Task
-        {
-            private $chunkManager;
-
-            public function __construct(ChunkManager $chunkManager)
-            {
-                $this->chunkManager = $chunkManager;
-            }
-
-            function onRun(int $tick): void
-            {
-                $this->chunkManager->removeEmptyChunks();
-            }
-        }, $removePeriod * 20, $removePeriod * 20);*/
         $scheduler->scheduleDelayedRepeatingTask(new Task(function (): void {
             $this->removeEmptyChunks();
         }), $removePeriod * 20, $removePeriod * 20);
