@@ -88,13 +88,13 @@ final class RegionManager
 
     public function createRegion(string $name, string $creator, Vector3 $pos1, Vector3 $pos2, Level $level): Region
     {
-        $minX = min($pos1->x, $pos2->x);
-        $minY = min($pos1->y, $pos2->y);
-        $minZ = min($pos1->z, $pos2->z);
+        $minX = (int)min($pos1->x, $pos2->x);
+        $minY = (int)min($pos1->y, $pos2->y);
+        $minZ = (int)min($pos1->z, $pos2->z);
 
-        $maxX = max($pos1->x, $pos2->x);
-        $maxY = max($pos1->y, $pos2->y);
-        $maxZ = max($pos1->z, $pos2->z);
+        $maxX = (int)max($pos1->x, $pos2->x);
+        $maxY = (int)max($pos1->y, $pos2->y);
+        $maxZ = (int)max($pos1->z, $pos2->z);
 
         $region = new Region($name, $creator, $level->getName(), $minX, $minY, $minZ, $maxX, $maxY, $maxZ);
 
