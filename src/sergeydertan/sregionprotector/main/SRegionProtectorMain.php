@@ -311,7 +311,7 @@ final class SRegionProtectorMain extends PluginBase
         }), $this->settings->getAutoSavePeriod(), $this->settings->getAutoSavePeriod());
     }
 
-    public function save(int $type, string $initiator = null): void
+    public function save(int $type, ?string $initiator = null): void
     {
         switch ($type) {
             default:
@@ -319,7 +319,7 @@ final class SRegionProtectorMain extends PluginBase
                 $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("auto-save-start"));
                 break;
             case SaveType::MANUAL:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start"));
+                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start", ["@initiator"], [$initiator]));
                 break;
             case SaveType::DISABLING:
                 $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling-save-start"));
