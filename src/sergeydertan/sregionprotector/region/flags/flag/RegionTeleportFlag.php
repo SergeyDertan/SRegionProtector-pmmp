@@ -29,6 +29,7 @@ final class RegionTeleportFlag extends RegionFlag
 
     public function getPosition(): ?Position
     {
+        if ($this->level === null) return null;
         $level = Server::getInstance()->getLevelByName($this->level);
         if ($level === null) return null;
         return clone $this->position;
