@@ -73,6 +73,6 @@ final class RegionFlagCommand extends SRegionProtectorCommand
             }
         }
         $region->setFlagState($flag, $state);
-        $this->messenger->sendMessage($sender, "command.{$this->msg}.flag" . ($state ? "enabled" : "disabled"), ["@region", "@flag"], [$region->getName(), $args[1]]);
+        $this->messenger->sendMessage($sender, "command.{$this->msg}.flag." . ($state ? "enabled" : "disabled"), ["@region", "@flag"], [$region->getName(), $args[1]]);
     }
 }
