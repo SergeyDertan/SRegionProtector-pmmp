@@ -15,11 +15,16 @@ final class RegionFlagCommand extends SRegionProtectorCommand
      * @var RegionManager
      */
     private $regionManager;
+    /**
+     * @var bool[]
+     */
+    private $flagStatus;
 
-    public function __construct(RegionManager $regionManager)
+    public function __construct(RegionManager $regionManager, array $flagStatus)
     {
         parent::__construct("rgflag", "flag");
         $this->regionManager = $regionManager;
+        $this->flagStatus = $flagStatus;
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
@@ -71,6 +76,9 @@ final class RegionFlagCommand extends SRegionProtectorCommand
             } else {
                 $region->setTeleportFlag(null, false);
             }
+        }
+        if (!$this->flagStatus[$flag]) {
+            $this->messenger->sendMessage($sender, "command.flag.disabled-warning");
         }
         $region->setFlagState($flag, $state);
         $this->messenger->sendMessage($sender, "command.{$this->msg}.flag." . ($state ? "enabled" : "disabled"), ["@region", "@flag"], [$region->getName(), $args[1]]);

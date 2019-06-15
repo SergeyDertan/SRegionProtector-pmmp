@@ -252,7 +252,7 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->registerCommand(new CopyFlagsCommand($this->regionManager));
 
-        $this->registerCommand(new RegionFlagCommand($this->regionManager));
+        $this->registerCommand(new RegionFlagCommand($this->regionManager, $this->settings->getRegionSettings()->getFlagStatus()));
 
         $this->registerCommand(new RegionInfoCommand($this->regionManager, $this->chunkManager, $this->settings->getRegionSettings()));
 
