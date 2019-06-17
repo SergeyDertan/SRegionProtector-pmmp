@@ -5,8 +5,11 @@ namespace sergeydertan\sregionprotector\command;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\plugin\Plugin;
+use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 
-final class RegionCommand extends SRegionProtectorCommand
+final class RegionCommand extends SRegionProtectorCommand implements PluginIdentifiableCommand
 {
     /**
      * name -> command
@@ -41,5 +44,10 @@ final class RegionCommand extends SRegionProtectorCommand
     public function registerCommand(Command $command): void
     {
         $this->commands[str_replace("rg", "", str_replace("region", "", $command->getName()))] = $command;
+    }
+
+    public function getPlugin(): Plugin
+    {
+        return SRegionProtectorMain::getInstance();
     }
 }

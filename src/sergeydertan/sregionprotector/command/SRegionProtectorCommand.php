@@ -5,10 +5,13 @@ namespace sergeydertan\sregionprotector\command;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\Player;
+use pocketmine\plugin\Plugin;
+use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 use sergeydertan\sregionprotector\messenger\Messenger;
 
-abstract class SRegionProtectorCommand extends Command
+abstract class SRegionProtectorCommand extends Command implements PluginIdentifiableCommand
 {
     /**
      * @var Messenger
@@ -57,5 +60,10 @@ abstract class SRegionProtectorCommand extends Command
         if (count($args) >= $requiredArguments) return true;
         $this->messenger->sendMessage($target, "command.{$this->msg}.usage");
         return false;
+    }
+
+    public function getPlugin(): Plugin
+    {
+        return SRegionProtectorMain::getInstance();
     }
 }
