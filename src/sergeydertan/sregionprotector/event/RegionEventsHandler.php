@@ -168,7 +168,7 @@ final class RegionEventsHandler implements Listener
                  */
                 //($this->getDamage() & 0x08) === 0x08
 
-                $isUp = ($block->getDamage() & 0x08) === 0x08;
+                /*$isUp = ($block->getDamage() & 0x08) === 0x08;
                 if ($isUp) {
                     $up = $block->getDamage();
                 } else {
@@ -188,7 +188,7 @@ final class RegionEventsHandler implements Listener
                 }
 
                 $f->setDamage($f->getDamage() & 0x04);
-                $f->level->setBlock($f, $f, true);
+                $f->level->setBlock($f, $f, true);*/
 
                 //$e->setCancelled();
                 return;
