@@ -279,7 +279,7 @@ final class SRegionProtectorMain extends PluginBase
 
     private function registerCommand(Command $command): void
     {
-        if (!$this->settings->isHideCommands()) $this->getServer()->getCommandMap()->register($command->getName(), $command);
+        if (!$this->settings->isHideCommands()) $this->getServer()->getCommandMap()->register("sregionprotector", $command);
         $this->mainCommand->registerCommand($command);
     }
 
