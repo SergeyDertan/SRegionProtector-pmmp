@@ -109,28 +109,19 @@ final class SRegionProtectorMain extends PluginBase
     {
         self::$INSTANCE = $this;
 
-        $start = Utils::currentTimeMillis();
-
-        if (!$this->createDirectories()) return;
+        $this->createDirectories();
         $this->initMessenger();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.start", ["@ver"], [$this->getDescription()->getVersion()]));
-
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.settings"));
         $this->initSettings();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.data-provider"));
-        if (!$this->initDataProvider()) return;
+        $this->initDataProvider();
 
         $this->initChunks();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.regions"));
         $this->initRegions();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.events-handlers"));
         $this->initEventsHandlers();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.commands"));
         $this->initCommands();
 
         $this->registerBlockEntity();
@@ -141,23 +132,20 @@ final class SRegionProtectorMain extends PluginBase
 
         $this->initUI();
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.successful", ["@time"], [(string)(Utils::currentTimeMillis() - $start)]));
-
         $this->checkUpdate();
     }
 
-    private function createDirectories(): bool
+    private function createDirectories(): void
     {
         $this->mainFolder = Server::getInstance()->getDataPath() . "Sergey_Dertan_Plugins/SRegionProtector/";
         $this->regionsFolder = $this->mainFolder . "regions/";
         $this->langFolder = $this->mainFolder . "lang/";
         $this->dbFolder = $this->mainFolder . "db/";
 
-        return
-            Utils::createDir($this->mainFolder) &&
-            Utils::createDir($this->regionsFolder) &&
-            Utils::createDir($this->langFolder) &&
-            Utils::createDir($this->dbFolder);
+        Utils::createDir($this->mainFolder);
+        Utils::createDir($this->regionsFolder);
+        Utils::createDir($this->langFolder);
+        Utils::createDir($this->dbFolder);
     }
 
     private function initMessenger(): void
@@ -170,14 +158,11 @@ final class SRegionProtectorMain extends PluginBase
         $this->settings = new Settings();
     }
 
-    private function initDataProvider(): bool
+    private function initDataProvider(): void
     {
-        try {
-            $this->dataProvider = $this->getProviderInstance($this->settings->getProvider());
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        $this->dataProvider = $this->getProviderInstance($this->settings->getProvider());
+
+        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.data-provider-type", ["@type"], [$this->dataProvider->getName()]));
     }
 
     public function getProviderInstance(int $type): DataProvider
@@ -343,6 +328,7 @@ final class SRegionProtectorMain extends PluginBase
     private function checkUpdate(): void
     {
         try {
+            $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.check-update"));
             $data = Utils::httpRequest(static::VERSION_URL);
             $data = json_decode($data, true);
 
@@ -368,8 +354,6 @@ final class SRegionProtectorMain extends PluginBase
 
     public function onDisable(): void
     {
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.start", ["@ver"], [$this->getDescription()->getVersion()]));
-
         $this->save(SaveType::DISABLING);
         $this->dataProvider->close();
     }

@@ -35,6 +35,8 @@ abstract class DataProvider
 
     public abstract function getType(): int;
 
+    public abstract function getName(): string;
+
     public abstract function removeRegion(string $name): void;
 
     public function close(): void

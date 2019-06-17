@@ -77,10 +77,10 @@ final class RegionManager
             case SaveType::AUTO:
                 $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-auto-save", ["@amount"], [(string)$amount]));
                 break;
-            case SaveType::MANUAL:
+            case SaveType::DISABLING:
                 $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.regions-saved", ["@amount", "@initiator"], [(string)$amount, $initiator]));
                 break;
-            case SaveType::DISABLING:
+            case SaveType::MANUAL:
                 $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-manual-save", ["@amount"], [(string)$amount]));
                 break;
         }
@@ -203,8 +203,7 @@ final class RegionManager
                 $region->addChunk($chunk);
             }
         }
-        $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("loading.regions.success", ["@count"], [(string)count($this->regions)]));
-        $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("loading.chunks.success", ["@count"], [(string)$this->chunkManager->getChunkAmount()]));
+        $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("loading.success", ["@regions", "@chunks"], [(string)count($this->regions), (string)$this->chunkManager->getChunkAmount()]));
     }
 
     public function getRegion(string $name): ?Region

@@ -75,6 +75,7 @@ final class Region
      */
     private $priority = 0;
     /**
+     * for updating priorities
      * @var Chunk[]
      */
     private $chunks = [];

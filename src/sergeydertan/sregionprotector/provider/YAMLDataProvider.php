@@ -96,4 +96,9 @@ final class YAMLDataProvider extends DataProvider
     {
         return self::YAML;
     }
+
+    public function getName(): string
+    {
+        return "YAML";
+    }
 }

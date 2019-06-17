@@ -12,7 +12,7 @@ use sergeydertan\sregionprotector\util\Task;
 final class ChunkManager
 {
     /**
-     * level -> Chunk[]
+     * level -> [hash -> Chunk]
      * @var Chunk[][]
      */
     private $chunks = [];
