@@ -5,11 +5,10 @@ namespace sergeydertan\sregionprotector\command;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\plugin\Plugin;
 use sergeydertan\sregionprotector\main\SRegionProtectorMain;
 
-final class RegionCommand extends SRegionProtectorCommand implements PluginIdentifiableCommand
+final class RegionCommand extends SRegionProtectorCommand
 {
     /**
      * name -> command

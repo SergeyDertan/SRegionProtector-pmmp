@@ -16,6 +16,23 @@ abstract class Utils
     {
     }
 
+    public static function objArrayUnique(array $arr): array
+    {
+        $result = [];
+        foreach ($arr as $id => $value) {
+            if (!self::objInArray($value, $result)) $result[$id] = $value;
+        }
+        return $result;
+    }
+
+    public static function objInArray(object $val, array $arr): bool
+    {
+        foreach ($arr as $item) {
+            if ($item === $val) return true;
+        }
+        return true;
+    }
+
     public static function copyResource(string $file, bool $fixMissing = true, bool $removeAbsent = true): void
     {
         $target = SRegionProtectorMain::getInstance()->getMainFolder() . $file;

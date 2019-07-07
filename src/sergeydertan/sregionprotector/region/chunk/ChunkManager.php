@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\region\chunk;
 
-use Logger;
 use pocketmine\math\Vector3;
 use pocketmine\scheduler\TaskScheduler;
 use sergeydertan\sregionprotector\region\Region;
@@ -16,15 +15,6 @@ final class ChunkManager
      * @var Chunk[][]
      */
     private $chunks = [];
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(Logger $logger)
-    {
-        $this->logger = $logger;
-    }
 
     public function init(bool $emptyChunksAutoRemoving, int $removePeriod, TaskScheduler $scheduler)
     {

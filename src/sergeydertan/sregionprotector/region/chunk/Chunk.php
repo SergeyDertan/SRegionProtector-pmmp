@@ -53,9 +53,9 @@ final class Chunk
 
     public function addRegion(Region $region): void
     {
+        if (in_array($region, $this->regions)) return;
         $this->regions[] = $region;
         usort($this->regions, self::$regionComparator);
-        //TODO unique
     }
 
     public function removeRegion(Region $region): void

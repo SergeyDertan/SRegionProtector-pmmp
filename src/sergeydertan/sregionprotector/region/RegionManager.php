@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace sergeydertan\sregionprotector\region;
 
-use Logger;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
-use pocketmine\utils\TextFormat;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\main\SaveType;
 use sergeydertan\sregionprotector\messenger\Messenger;
@@ -32,10 +30,6 @@ final class RegionManager
      */
     private $regions = [];
     /**
-     * @var Logger
-     */
-    private $logger;
-    /**
      * @var ChunkManager
      */
     private $chunkManager;
@@ -55,10 +49,9 @@ final class RegionManager
      */
     private $messenger;
 
-    public function __construct(DataProvider $provider, Logger $logger, ChunkManager $chunkManager)
+    public function __construct(DataProvider $provider, ChunkManager $chunkManager)
     {
         $this->provider = $provider;
-        $this->logger = $logger;
         $this->chunkManager = $chunkManager;
         $this->messenger = Messenger::getInstance();
     }
@@ -75,13 +68,13 @@ final class RegionManager
         switch ($type) {
             default:
             case SaveType::AUTO:
-                $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-auto-save", ["@amount"], [(string)$amount]));
+                //$this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-auto-save", ["@amount"], [(string)$amount]));
                 break;
             case SaveType::DISABLING:
-                $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.regions-saved", ["@amount", "@initiator"], [(string)$amount, $initiator]));
+                //$this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("disabling.regions-saved", ["@amount", "@initiator"], [(string)$amount, $initiator]));
                 break;
             case SaveType::MANUAL:
-                $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-manual-save", ["@amount"], [(string)$amount]));
+                //$this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("regions-manual-save", ["@amount"], [(string)$amount]));
                 break;
         }
     }
@@ -203,7 +196,7 @@ final class RegionManager
                 $region->addChunk($chunk);
             }
         }
-        $this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("loading.success", ["@regions", "@chunks"], [(string)count($this->regions), (string)$this->chunkManager->getChunkAmount()]));
+        //$this->logger->info(TextFormat::GREEN . $this->messenger->getMessage("loading.success", ["@regions", "@chunks"], [(string)count($this->regions), (string)$this->chunkManager->getChunkAmount()]));
     }
 
     public function getRegion(string $name): ?Region

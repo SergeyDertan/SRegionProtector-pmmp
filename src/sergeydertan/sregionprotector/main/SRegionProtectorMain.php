@@ -8,7 +8,6 @@ use pocketmine\command\Command;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\tile\Tile;
-use pocketmine\utils\TextFormat;
 use RuntimeException;
 use sergeydertan\sregionprotector\blockentity\BlockEntityHealer;
 use sergeydertan\sregionprotector\command\admin\SaveCommand;
@@ -162,7 +161,7 @@ final class SRegionProtectorMain extends PluginBase
     {
         $this->dataProvider = $this->getProviderInstance($this->settings->getProvider());
 
-        $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.data-provider-type", ["@type"], [$this->dataProvider->getName()]));
+        //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.data-provider-type", ["@type"], [$this->dataProvider->getName()]));
     }
 
     public function getProviderInstance(int $type): DataProvider
@@ -179,14 +178,14 @@ final class SRegionProtectorMain extends PluginBase
 
     private function initChunks(): void
     {
-        $this->chunkManager = new ChunkManager($this->getLogger());
+        $this->chunkManager = new ChunkManager();
         $this->chunkManager->init($this->settings->isEmptyChunksRemoving(), $this->settings->getEmptyChunksRemovingPeriod(), $this->getScheduler());
     }
 
     private function initRegions(): void
     {
         $this->regionSelector = new RegionSelector($this->settings->getSelectorSessionLifetime(), $this->settings->getBorderBlock());
-        $this->regionManager = new RegionManager($this->dataProvider, $this->getLogger(), $this->chunkManager);
+        $this->regionManager = new RegionManager($this->dataProvider, $this->chunkManager);
         $this->regionManager->init($this->settings->getRegionSettings()->isSaveNewFlags());
 
         BlockEntityHealer::setRegionManager($this->regionManager);
@@ -301,13 +300,13 @@ final class SRegionProtectorMain extends PluginBase
         switch ($type) {
             default:
             case SaveType::AUTO:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("auto-save-start"));
+                //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("auto-save-start"));
                 break;
             case SaveType::MANUAL:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start", ["@initiator"], [$initiator]));
+                //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("manual-save-start", ["@initiator"], [$initiator]));
                 break;
             case SaveType::DISABLING:
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling-save-start"));
+                //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("disabling-save-start"));
                 break;
         }
         $this->regionManager->save($type, $initiator);
@@ -328,7 +327,7 @@ final class SRegionProtectorMain extends PluginBase
     private function checkUpdate(): void
     {
         try {
-            $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.check-update"));
+            //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.check-update"));
             $data = Utils::httpRequest(static::VERSION_URL);
             $data = json_decode($data, true);
 
@@ -336,8 +335,8 @@ final class SRegionProtectorMain extends PluginBase
             $description = (string)$data["name"];
 
             if (strcasecmp(Utils::compareVersions($ver, $this->getDescription()->getVersion()), $ver) === 0) {
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
-                $this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
+                //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-available", ["@ver"], [$ver]));
+                //$this->getLogger()->info(TextFormat::GREEN . $this->messenger->getMessage("loading.init.update-description", ["@description"], [$description]));
 
                 if ($this->settings->isUpdateNotifier()) {
                     $this->getServer()->getPluginManager()->registerEvents(new NotifierEventsHandler($ver, $description), $this);
