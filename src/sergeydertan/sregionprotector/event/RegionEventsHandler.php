@@ -139,7 +139,7 @@ final class RegionEventsHandler implements Listener
     /**
      * place flag
      * @param BlockPlaceEvent $e
-     *x
+     *
      * @priority HIGH
      * @ignoreCancelled true
      */
