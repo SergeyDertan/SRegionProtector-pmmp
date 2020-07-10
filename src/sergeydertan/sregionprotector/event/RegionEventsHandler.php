@@ -139,7 +139,7 @@ final class RegionEventsHandler implements Listener
     /**
      * place flag
      * @param BlockPlaceEvent $e
-     *
+     *x
      * @priority HIGH
      * @ignoreCancelled true
      */
@@ -196,20 +196,20 @@ final class RegionEventsHandler implements Listener
         }
 
         if ($e->getItem() !== null && $e->getItem()->getId() === ItemIds::FLINT_AND_STEEL) {
-            $this->handleEvent(RegionFlags::FLAG_LIGHTER, $block, $e, $e->getPlayer(), false, false);
+            $this->handleEvent(RegionFlags::FLAG_LIGHTER, $block, $e, $e->getPlayer());
             return;
         }
         if ($block instanceof Chest) {
-            $this->handleEvent(RegionFlags::FLAG_CHEST_ACCESS, $block, $e, $e->getPlayer(), false, false);
+            $this->handleEvent(RegionFlags::FLAG_CHEST_ACCESS, $block, $e, $e->getPlayer());
             return;
         }
         if ($block instanceof Farmland) {
-            $this->handleEvent(RegionFlags::FLAG_CROPS_DESTROY, $block, $e, $e->getPlayer(), false, false);
+            $this->handleEvent(RegionFlags::FLAG_CROPS_DESTROY, $block, $e, $e->getPlayer());
             return;
         }
         if ($block instanceof Door || $block instanceof Trapdoor || $block instanceof Button || $block instanceof Furnace) {
             //TODO beacon, hopper, dispenser
-            $this->handleEvent(RegionFlags::FLAG_USE, $block, $e, $e->getPlayer(), false, false);
+            $this->handleEvent(RegionFlags::FLAG_USE, $block, $e, $e->getPlayer());
             return;
         }
     }
