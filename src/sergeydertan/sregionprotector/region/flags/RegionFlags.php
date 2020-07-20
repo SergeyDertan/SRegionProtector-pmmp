@@ -146,8 +146,8 @@ abstract class RegionFlags
 
     public static function getStateFromString(string $state, int $flag): bool
     {
-        if (strcasecmp($state, "allow")) return !self::$state[$flag];
-        if (strcasecmp($state, "deny")) return self::$state[$flag];
+        if (strcasecmp($state, "allow") === 0) return !self::$state[$flag];
+        if (strcasecmp($state, "deny") === 0) return self::$state[$flag];
         throw new RuntimeException("Wrong state");
     }
 
