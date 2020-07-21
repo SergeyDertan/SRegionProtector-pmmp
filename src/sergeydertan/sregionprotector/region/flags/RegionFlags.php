@@ -131,7 +131,7 @@ abstract class RegionFlags
 
     public static function getFlagId(string $name): int
     {
-        return self::$id[strtolower($name)];
+        return self::$id[strtolower($name)] ?? self::FLAG_INVALID;
     }
 
     public static function getFlagPermission(int $flag): string
