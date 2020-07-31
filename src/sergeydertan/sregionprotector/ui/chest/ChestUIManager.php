@@ -10,6 +10,7 @@ use pocketmine\nbt\NetworkLittleEndianNBTStream;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\network\mcpe\protocol\BlockActorDataPacket;
 use pocketmine\network\mcpe\protocol\BlockEntityDataPacket;
 use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\Player;
@@ -54,7 +55,7 @@ abstract class ChestUIManager
         $pk1->blockRuntimeId = Block::get(BlockIds::CHEST, 0)->getRuntimeId();
         $target->dataPacket($pk1);
 
-        $pk2 = new BlockEntityDataPacket();
+        $pk2 = new BlockActorDataPacket();
         $pk2->x = $pk1->x;
         $pk2->y = $pk1->y;
         $pk2->z = $pk1->z;
