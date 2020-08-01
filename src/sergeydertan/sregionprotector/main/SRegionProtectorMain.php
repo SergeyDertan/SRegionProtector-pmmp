@@ -136,7 +136,8 @@ final class SRegionProtectorMain extends PluginBase
 
     private function createDirectories(): void
     {
-        $this->mainFolder = Server::getInstance()->getDataPath() . "Sergey_Dertan_Plugins/SRegionProtector/";
+        //$this->mainFolder = Server::getInstance()->getDataPath() . "Sergey_Dertan_Plugins/SRegionProtector/";
+        $this->mainFolder = $this->getDataFolder();
         $this->regionsFolder = $this->mainFolder . "regions/";
         $this->langFolder = $this->mainFolder . "lang/";
         $this->dbFolder = $this->mainFolder . "db/";
