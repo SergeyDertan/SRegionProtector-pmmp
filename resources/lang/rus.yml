@@ -189,7 +189,7 @@ command.removeowner.region-doesnt-exists: "Регион {@region} не найд�
 command.removeowner.not-a-owner: "Игрок {@target} не владелец региона {@region}"
 command.removeowner.owner-removed: "Игрок {@target} более не владелец региона {@region}"
 command.removeowner.cant-remove-owner: "Region creator cant be removed"
-command.removeowner.description: "удалить валдельца из региона"
+command.removeowner.description: "удалить владельца из региона"
 
 command.info.permission: "Недостаточно прав"
 command.info.description: "информация о регионе"
