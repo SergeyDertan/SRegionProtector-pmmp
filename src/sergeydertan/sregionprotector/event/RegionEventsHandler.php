@@ -9,11 +9,13 @@ use pocketmine\block\Door;
 use pocketmine\block\Farmland;
 use pocketmine\block\Furnace;
 use pocketmine\block\Trapdoor;
+use pocketmine\entity\projectile\Projectile;
 use pocketmine\entity\projectile\SplashPotion;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockBurnEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\LeavesDecayEvent;
+use pocketmine\event\entity\EntityCombustByEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityExplodeEvent;
@@ -33,7 +35,6 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\item\ItemIds;
 use pocketmine\level\particle\AngryVillagerParticle;
 use pocketmine\level\Position;
-use pocketmine\math\Vector3;
 use pocketmine\Player;
 use sergeydertan\sregionprotector\messenger\Messenger;
 use sergeydertan\sregionprotector\region\chunk\ChunkManager;
@@ -240,6 +241,27 @@ final class RegionEventsHandler implements Listener
     }
 
     /**
+     * prevent arrow fire with disabled pvp
+     * @param EntityCombustByEntityEvent $e
+     */
+    public function entityCombustByEntity(EntityCombustByEntityEvent $e): void
+    {
+        $target = $e->getEntity();
+        $combuster = $e->getCombuster();
+        if (!$target instanceof Player) return;
+        if ($combuster instanceof Player) {
+            $this->handleEvent(RegionFlags::FLAG_PVP, $target, $e, $combuster, false, false);
+            return;
+        }
+        if (!$combuster instanceof Projectile) return;
+        $combuster = $combuster->getOwningEntity();
+        if ($combuster instanceof Player) {
+            $this->handleEvent(RegionFlags::FLAG_PVP, $target, $e, $combuster, false, false);
+            return;
+        }
+    }
+
+    /**
      * pvp, mob damage, lightning strike & invincible flags
      * @param EntityDamageEvent $e
      *
@@ -264,6 +286,9 @@ final class RegionEventsHandler implements Listener
              */
             $damager = $e->getDamager();
             $this->handleEvent(RegionFlags::FLAG_PVP, $ent, $e, $damager, false, false);
+            if (!$e->isCancelled()) {
+                $this->handleEvent(RegionFlags::FLAG_PVP, $damager, $e, $damager, false, false);
+            }
         } else if (false) {
             //TODO mob damager
         } else if (false) {
