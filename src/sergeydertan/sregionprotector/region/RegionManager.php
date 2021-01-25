@@ -105,6 +105,8 @@ final class RegionManager
         }
         $this->regions[strtolower($region->getName())] = $region;
 
+        $level->getChunkAtPosition($region->getHealerVector(), true);
+
         new BlockEntityHealer($level, BlockEntityHealer::getDefaultNBT($region->getHealerVector(), $name));
         $region->needUpdate = true;
         return $region;
